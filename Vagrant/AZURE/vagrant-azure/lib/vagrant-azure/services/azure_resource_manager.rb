@@ -1,6 +1,6 @@
 # encoding: utf-8
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See License in the project root for license information.
+# Copyright (c) Microsoft Corporation. Tous les droits sont réservés.
+# Sous licence sous la licence MIT. Voir Licence dans la racine du projet pour les informations de licence.
 
 require 'azure_mgmt_resources'
 require 'azure_mgmt_compute'
@@ -18,8 +18,8 @@ module VagrantPlugins
         CLIENT_ID_NAME = 'AZURE_CLIENT_ID'
         CLIENT_SECRET_NAME = 'AZURE_CLIENT_SECRET'
 
-        # AzureResourceManager provides access to the Azure Resource Manager APIs
-        # @param [MsRest::TokenProvider] token_provider object used to procure an authentication token from Azure Active
+        # AzureResourceManager donne accès aux API Azure Resource Manager
+        # @param [MsRest::TokenProvider] objet token_provider utilisé pour obtenir un jeton d'authentification auprès d'Azure Active
         #   Directory
         # @param [String] subscription_id
         # @param [String] base_url
@@ -41,25 +41,25 @@ module VagrantPlugins
           @subscription_id = subscription_id
         end
 
-        # Azure Resource Manager Compute API Client
+        # Client d'API de calcul Azure Resource Manager
         # @return [Azure::ARM::Compute::ComputeManagementClient]
         def compute
           build(::Azure::ARM::Compute::ComputeManagementClient)
         end
 
-        # Azure Resource Manager Generic Resource API Client
+        # Client d'API de ressources génériques Azure Resource Manager
         # @return [Azure::ARM::Resources::ResourceManagementClient]
         def resources
           build(::Azure::ARM::Resources::ResourceManagementClient)
         end
 
-        # Azure Resource Manager Network API Client
+        # Client d'API réseau Azure Resource Manager
         # @return [Azure::ARM::Network::NetworkManagementClient]
         def network
           build(::Azure::ARM::Network::NetworkManagementClient)
         end
 
-        # Azure Resource Manager Storage API Client
+        # Client d'API de stockage Azure Resource Manager
         # @return [Azure::ARM::Storage::StorageManagementClient]
         def storage
           build(::Azure::ARM::Storage::StorageManagementClient)
