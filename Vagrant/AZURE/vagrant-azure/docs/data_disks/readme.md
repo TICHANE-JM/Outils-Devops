@@ -1,20 +1,19 @@
-# Linux Machine with Empty Data Disks
-This scenario will build an Ubuntu 16.04 machine with data disks attached to the virtual machine.
+# Machine Linux avec disques de données vides
+Ce scénario créera une machine Ubuntu 16.04 avec des disques de données attachés à la machine virtuelle.
 
-To see more information about this scenario, see [How to Attach a Data Disk to a Linux VM](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/classic/attach-disk)
+Pour plus d'informations sur ce scénario, voir [Comment attacher un disque de données à une machine virtuelle Linux](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/classic/attach-disk)
 
-Before you attempt this scenario, ensure you have followed the [getting started docs](../../readme.md#getting-started).
+Avant de tenter ce scénario, assurez-vous d'avoir suivi les [getting started docs](../../README.md#getting-started).
 
-*Note: data disk support is preview and will likely change before becoming stable*
+*Remarque : la prise en charge des disques de données est en préversion et sera probablement modifiée avant de devenir stable*
 
 ## Vagrant up
-- In this directory, run the following
+- Dans ce répertoire, exécutez ce qui suit
   ```bash
   vagrant up --provider=azure
   ```
-- The Vagrant file specifies on data disk named foo. The foo disk is not formatted, nor mounted. If you
-  would like to use the disk, you will need to format and mount the drive. For instructions on how to do that,
-  see: https://docs.microsoft.com/en-us/azure/virtual-machines/linux/classic/attach-disk#initialize-a-new-data-disk-in-linux.
-  In the next rev of data disks, we'll handle mounting and formatting.
+- Le fichier Vagrant spécifie sur le disque de données nommé foo. Le disque foo n'est pas formaté, ni monté. Si vous souhaitez utiliser le disque, vous devrez formater et monter le lecteur. Pour obtenir des instructions sur la façon de procéder, voir : https://docs.microsoft.com/en-us/azure/virtual-machines/linux/classic/attach-disk#initialize-a-new-data-disk-in- linux.
+  Dans la prochaine version des disques de données, nous nous occuperons du montage et du formatage.
+
   
-To clean up, run `vagrant destroy`
+pour nettoyer, exécutez `vagrant destroy`
