@@ -33,7 +33,7 @@ Bien sûr, avant de faire cela, vous devrez obtenir un fichier de boîte pour Va
 Après avoir installé le plugin (instructions ci-dessus), le moyen le plus rapide de commencer est d'utiliser une boîte AWS factice et de spécifier tous les détails manuellement dans un bloc `config.vm.provider`. Alors d'abord, ajoutez la boîte factice en utilisant le nom que vous voulez :
 
 ```
-$ vagrant box add dummy https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box
+$ vagrant box add dummy https://github.com/TICHANE-JM/Outils-Devops/blob/main/Vagrant/AWS/vagrant-aws-master/dummy.box
 ...
 ```
 
