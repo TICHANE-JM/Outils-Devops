@@ -12,5 +12,5 @@ Vagrant.configure("2") do |config|
     azure.vm_operating_system = "Linux"
   end
 
-  config.vm.provision "shell", inline: "echo Hello, World"
+  config.vm.provision "shell", inline: "echo Coucou tout le monde "
 end
