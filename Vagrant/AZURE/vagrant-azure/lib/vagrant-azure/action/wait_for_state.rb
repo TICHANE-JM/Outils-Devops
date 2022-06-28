@@ -1,6 +1,6 @@
-# encoding: utf-8
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See License in the project root for license information.
+# encodage : utf-8
+# Copyright (c) Microsoft Corporation. Tous les droits sont réservés.
+# Licence sous la licence MIT. Voir Licence dans la racine du projet pour les informations de licence.
 require 'log4r'
 require 'timeout'
 
@@ -8,10 +8,10 @@ module VagrantPlugins
   module Azure
     module Action
       class WaitForState
-        # env[:result] will be false in case of timeout.
-        # @param [Symbol] state Target machine state.
-        # @param [Number] timeout Timeout in seconds.
-        # @param [Object] env vagrant environment
+        # env[:result] sera faux en cas de timeout.
+        # @param [Symbol] état État de la machine cible.
+        # @param [Number] timeout Timeout en secondes.
+        # @param [Object] env environnement vagrant
         def initialize(app, env, state, timeout)
           @app     = app
           @logger  = Log4r::Logger.new('vagrant_azure::action::wait_for_state')
