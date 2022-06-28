@@ -3,7 +3,7 @@ require 'vagrant-aws/util/elb'
 module VagrantPlugins
   module AWS
     module Action
-      # This registers instance in ELB
+      # Cela enregistre l'instance dans ELB
       class ElbRegisterInstance
         include ElasticLoadBalancer
 
