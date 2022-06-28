@@ -1,0 +1,7 @@
+---
+instance_type: "t2.micro"
+region: "us-west-2"
+ami: "ami-746aba14"
+user: "ubuntu"
+security_groups: ["default"]
+keypair_name: "aws_rsa"
