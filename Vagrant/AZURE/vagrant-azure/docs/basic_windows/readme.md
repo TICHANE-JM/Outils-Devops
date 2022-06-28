@@ -1,12 +1,12 @@
-# Basic Windows SQL Server 2016 Machine
-This scenario will build a Windows SQL Server 2016 machine.
+# Ordinateur Windows SQL Server 2016 de base
+Ce scénario créera une machine Windows SQL Server 2016.
 
-Before you attempt this scenario, ensure you have followed the [getting started docs](../../readme.md#getting-started).
+Avant de tenter ce scénario, assurez-vous d'avoir suivi les [documents de démarrage](../../README.md#getting-started).
 
 ## Vagrant up
-- In this directory, run the following
+- Dans ce répertoire, exécutez ce qui suit
   ```bash
   vagrant up --provider=azure
   ```
   
-To clean up, run `vagrant destroy`
+Pour nettoyer, exécutez `vagrant destroy`
