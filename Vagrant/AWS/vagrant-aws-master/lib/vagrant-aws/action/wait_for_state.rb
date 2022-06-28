@@ -4,11 +4,11 @@ require "timeout"
 module VagrantPlugins
   module AWS
     module Action
-      # This action will wait for a machine to reach a specific state or quit by timeout
+      # Cette action attendra qu'une machine atteigne un état spécifique ou quitte par timeout
       class WaitForState
-        # env[:result] will be false in case of timeout.
-        # @param [Symbol] state Target machine state.
-        # @param [Number] timeout Timeout in seconds.
+        # env[:result] sera faux en cas de timeout.
+        # @param [Symbole] state État de la machine cible.
+        # @param [Number] timeout Délai d'attente en secondes.
         def initialize(app, env, state, timeout)
           @app     = app
           @logger  = Log4r::Logger.new("vagrant_aws::action::wait_for_state")
