@@ -8,7 +8,7 @@ module VagrantPlugins
     autoload :Action, lib_path.join("action")
     autoload :Errors, lib_path.join("errors")
 
-    # This returns the path to the source of this plugin.
+    # Cela renvoie le chemin vers la source de ce plugin.
     #
     # @return [Pathname]
     def self.source_root
