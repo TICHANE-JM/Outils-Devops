@@ -1,13 +1,11 @@
-# Vagrant AWS Example Box
+# Boîte d'exemple AWS Vagrant
 
-Vagrant providers each require a custom provider-specific box format.
-This folder shows the example contents of a box for the `aws` provider.
-To turn this into a box:
+Les fournisseurs Vagrant nécessitent chacun un format de boîte personnalisé spécifique au fournisseur.
+Ce dossier montre l'exemple de contenu d'une boîte pour le fournisseur `aws`.
+Pour en faire une boîte :
 
 ```
 $ tar cvzf aws.box ./metadata.json ./Vagrantfile
 ```
 
-This box works by using Vagrant's built-in Vagrantfile merging to setup
-defaults for AWS. These defaults can easily be overwritten by higher-level
-Vagrantfiles (such as project root Vagrantfiles).
+Cette boîte fonctionne en utilisant la fusion Vagrantfile intégrée de Vagrant pour configurer les valeurs par défaut pour AWS. Ces valeurs par défaut peuvent facilement être écrasées par des Vagrantfiles de niveau supérieur (tels que les Vagrantfiles racine du projet).
