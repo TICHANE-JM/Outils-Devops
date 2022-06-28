@@ -6,75 +6,75 @@
       "type": "string",
       "defaultValue": "vagrant",
       "metadata": {
-        "description": "User name for the Virtual Machine."
+        "description": "Nom d'utilisateur pour la machine virtuelle."
       }
     },
     <% if operating_system == 'Windows' %>
     "adminPassword": {
       "type": "securestring",
       "metadata": {
-        "description": "Password for the Virtual Machine (only used on Windows)"
+        "description": "Mot de passe pour la machine virtuelle (utilisé uniquement sous Windows)"
       }
     },
     <% else %>
     "sshKeyData": {
       "type": "string",
       "metadata": {
-        "description": "SSH rsa public key file as a string."
+        "description": "Fichier de clé publique SSH rsa sous forme de chaîne."
       }
     },
     <% end %>
     "dnsLabelPrefix": {
       "type": "string",
       "metadata": {
-        "description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
+        "description": "Nom DNS unique pour l'adresse IP publique utilisée pour accéder à la machine virtuelle."
       }
     },
     "nsgLabelPrefix": {
       "type": "string",
       "metadata": {
-        "description": "Network Security Group Label Prefix for the Virtual Machine."
+        "description": "Préfixe d'étiquette de groupe de sécurité réseau pour la machine virtuelle."
       }
     },
     "vmSize": {
       "type": "string",
       "defaultValue": "Standard_DS2_v2",
       "metadata": {
-        "description": "Size of the VM"
+        "description": "Taille de la machine virtuelle"
       }
     },
     "vmName": {
       "type": "string",
       "metadata": {
-        "description": "Name of the VM"
+        "description": "Nom de la machine virtuelle"
       }
     },
     "subnetName": {
       "type": "string",
       "defaultValue": "vagrant-subnet",
       "metadata": {
-        "description": "Name of the subnet"
+        "description": "Nom du sous-réseau"
       }
     },
     "virtualNetworkName": {
       "type": "string",
       "defaultValue": "vagrantVNET",
       "metadata": {
-        "description": "Name of the virtual network"
+        "description": "Nom du réseau virtuel"
       }
     },
     "winRmPort": {
       "type": "int",
       "defaultValue": 5986,
       "metadata": {
-        "description": "WinRM port"
+        "description": "Port WinRM"
       }
     },
     "storageAccountType": {
       "type": "string",
       "defaultValue": "Premium_LRS",
       "metadata": {
-        "description": "Storage account type for VM Disks"
+        "description": "Type de compte de stockage pour les disques de VM"
       }
     }
   },
