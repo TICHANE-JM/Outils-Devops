@@ -2,14 +2,14 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "azure"
 
-  # use local ssh key to connect to remote vagrant box
+  # utiliser la clé ssh locale pour se connecter à la boîte de vagabondage distante
   config.ssh.private_key_path = "~/.ssh/id_rsa"
   config.vm.provider :azure do |azure, override|
     azure.location = "westus"
 
-    # replace this with your managed image resource id
+    # remplacez-le par votre ID de ressource d'image gérée
     azure.vm_managed_image_id = "/subscriptions/{subscription_id}/resourceGroups/{group}/providers/Microsoft.Compute/images/{image_name}"
   end
 
-  config.vm.provision "shell", inline: "echo Hello, World"
+  config.vm.provision "shell", inline: "Coucou tout le monde"
 end
