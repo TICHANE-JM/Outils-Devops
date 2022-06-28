@@ -1,0 +1,27 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Spécifiez la version de Vagrant et la version de l'API Vagrant
+Vagrant.require_version ">= 1.6.0"
+VAGRANTFILE_API_VERSION = "2"
+
+# Créer et configurer la ou les VM
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # Attribuez un nom convivial à cette VM hôte
+  config.vm.hostname = "docker-host"
+
+  # Ignorer la recherche d'une boîte Vagrant mise à jour
+  config.vm.box_check_update = false
+
+  # Utilisez toujours la clé non sécurisée par défaut de Vagrant
+  config.ssh.insert_key = false
+
+  # Faites tourner une "boîte hôte" à utiliser avec le fournisseur Docker
+  # puis provisionnez-le avec Docker
+  config.vm.box = "bento/ubuntu-14.04"
+  config.vm.provision "docker"
+
+  # Désactiver les dossiers synchronisés (empêche une erreur NFS sur "vagrant up")
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+end
