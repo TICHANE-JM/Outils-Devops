@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------
 # Copyright (c) Microsoft Open Technologies, Inc.
-# All Rights Reserved.  Licensed under the Apache License, Version 2.0.
-# See License.txt in the project root for license information.
+# Tous les droits sont réservés. Sous licence Apache, version 2.0.
+# Voir License.txt dans la racine du projet pour les informations de licence.
 #--------------------------------------------------------------------------
 require 'log4r'
 require 'vagrant-azure/util/machine_id_helper'
