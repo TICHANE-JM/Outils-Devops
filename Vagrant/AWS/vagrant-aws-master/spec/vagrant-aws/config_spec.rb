@@ -1,8 +1,8 @@
 require "vagrant-aws/config"
 require 'rspec/its'
 
-# remove deprecation warnings
-# (until someone decides to update the whole spec file to rspec 3.4)
+# supprimer les avertissements d'obsolescence
+# (jusqu'à ce que quelqu'un décide de mettre à jour l'ensemble du fichier de spécifications vers rspec 3.4)
 RSpec.configure do |config|
   # ...
   config.mock_with :rspec do |c|
@@ -16,7 +16,7 @@ end
 describe VagrantPlugins::AWS::Config do
   let(:instance) { described_class.new }
 
-  # Ensure tests are not affected by AWS credential environment variables
+  # Assurez-vous que les tests ne sont pas affectés par les variables d'environnement d'informations d'identification AWS
   before :each do
     ENV.stub(:[] => nil)
   end
@@ -61,10 +61,10 @@ describe VagrantPlugins::AWS::Config do
   end
 
   describe "overriding defaults" do
-    # I typically don't meta-program in tests, but this is a very
-    # simple boilerplate test, so I cut corners here. It just sets
-    # each of these attributes to "foo" in isolation, and reads the value
-    # and asserts the proper result comes back out.
+    # Je ne fais généralement pas de méta-programme dans les tests, mais
+    # il s'agit d'un test passe-partout très simple, donc je coupe les coins ronds ici.
+    # Il définit simplement chacun de ces attributs sur "foo"
+    # de manière isolée, lit la valeur et affirme que le résultat approprié revient.
     [:access_key_id, :ami, :availability_zone, :instance_ready_timeout,
       :instance_package_timeout, :instance_type, :keypair_name, :ssh_host_attribute,
       :ebs_optimized, :region, :secret_access_key, :session_token, :monitoring,
@@ -73,8 +73,8 @@ describe VagrantPlugins::AWS::Config do
       :use_iam_profile, :user_data, :block_device_mapping,
       :source_dest_check].each do |attribute|
 
-      it "should not default #{attribute} if overridden" do
-        # but these should always come together, so you need to set them all or nothing
+      it "ne doit pas utiliser par défaut #{attribute} s'il est remplacé" do
+        # mais ceux-ci doivent toujours être réunis, vous devez donc les définir tous ou rien
         instance.send("access_key_id=".to_sym, "foo")
         instance.send("secret_access_key=".to_sym, "foo")
         instance.send("session_token=".to_sym, "foo")
@@ -83,15 +83,15 @@ describe VagrantPlugins::AWS::Config do
         instance.send(attribute).should == "foo"
       end
     end
-    it "should not default security_groups if overridden" do
+    it "ne devrait pas définir par défaut security_groups s'il est remplacé" do
       instance.security_groups = "foo"
       instance.finalize!
       instance.security_groups.should == ["foo"]
     end
   end
 
-  describe "getting credentials from environment" do
-    context "without EC2 credential environment variables" do
+  describe "obtenir des informations d'identification de l'environnement" do
+    context "sans variables d'environnement d'informations d'identification EC2" do
       subject do
         instance.tap do |o|
           o.finalize!
@@ -103,7 +103,7 @@ describe VagrantPlugins::AWS::Config do
       its("session_token")     { should be_nil }
     end
 
-    context "with EC2 credential environment variables" do
+    context "avec des variables d'environnement d'informations d'identification EC2" do
       before :each do
         ENV.stub(:[]).with("AWS_ACCESS_KEY_ID").and_return("access_key")
         ENV.stub(:[]).with("AWS_SECRET_ACCESS_KEY").and_return("secret_key")
@@ -123,8 +123,8 @@ describe VagrantPlugins::AWS::Config do
   end
 
 
-  describe "getting credentials when there is an AWS profile" do
-    ## ENV has been nuked so ENV['HOME'] will be a empty string when Credentials#get_aws_info gets called
+  describe "obtenir des informations d'identification lorsqu'il existe un profil AWS" do
+    ## ENV a été nuké donc ENV['HOME'] sera une chaîne vide lorsque Credentials#get_aws_info sera appelé
     let(:filename_cfg)  { "/.aws/config" }
     let(:filename_keys) { "/.aws/credentials" }
     let(:data_cfg)      {
@@ -163,14 +163,14 @@ aws_access_key_id=AKIuser3
 aws_secret_access_key=PASSuser3
 aws_session_token= TOKuser3
 " }
-    # filenames and file data when using AWS_SHARED_CREDENTIALS_FILE and AWS_CONFIG_FILE
+    # noms de fichiers et données de fichiers lors de l'utilisation de AWS_SHARED_CREDENTIALS_FILE et AWS_CONFIG_FILE
     let(:sh_dir)           { "/aws_shared/" }
     let(:sh_filename_cfg)  { sh_dir + "config" }
     let(:sh_filename_keys) { sh_dir + "credentials" }
     let(:sh_data_cfg)      { "[default]\nregion=sh-region\noutput=text" }
     let(:sh_data_keys)     { "[default]\naws_access_key_id=AKI_set_shared\naws_secret_access_key=set_shared_foobar" }
 
-    context "with EC2 credential environment variables set" do
+    context "avec ensemble de variables d'environnement d'informations d'identification EC2" do
       subject do
         ENV.stub(:[]).with("AWS_ACCESS_KEY_ID").and_return("env_access_key")
         ENV.stub(:[]).with("AWS_SECRET_ACCESS_KEY").and_return("env_secret_key")
@@ -188,7 +188,7 @@ aws_session_token= TOKuser3
       its("region")               { should == "env_region" }
     end
 
-    context "without EC2 credential environment variables but with AWS_CONFIG_FILE and AWS_SHARED_CREDENTIALS_FILE set" do
+    context "sans variables d'environnement d'informations d'identification EC2 mais avec AWS_CONFIG_FILE et AWS_SHARED_CREDENTIALS_FILE définis" do
       subject do
         allow(File).to receive(:exist?).and_return(true)
         allow(File).to receive(:read).with(filename_cfg).and_return(data_cfg)
@@ -207,7 +207,7 @@ aws_session_token= TOKuser3
       its("region")                { should == "sh-region" }
     end
 
-    context "without any credential environment variables and fallback to default profile at default location" do
+    context "sans variables d'environnement d'informations d'identification et retour au profil par défaut à l'emplacement par défaut" do
       subject do
         allow(File).to receive(:exist?).and_return(true)
         allow(File).to receive(:read).with(filename_cfg).and_return(data_cfg)
@@ -221,7 +221,7 @@ aws_session_token= TOKuser3
       its("session_token")         { should be_nil }
     end
 
-    context "without any credential environment variables and chosing a profile" do
+    context "sans aucune variable d'environnement d'identification et en choisissant un profil" do
       subject do
         allow(File).to receive(:exist?).and_return(true)
         allow(File).to receive(:read).with(filename_cfg).and_return(data_cfg)
@@ -259,20 +259,20 @@ aws_session_token= TOKuser3
       instance.session_token     = config_session_token
     end
 
-    it "should raise an exception if not finalized" do
+    it "devrait lever une exception s'il n'est pas finalisé" do
       expect { instance.get_region_config("us-east-1") }.
         to raise_error
     end
 
-    context "with no specific config set" do
+    context "sans jeu de configuration spécifique" do
       subject do
-        # Set the values on the top-level object
+        # Définir les valeurs sur l'objet de niveau supérieur
         set_test_values(instance)
 
-        # Finalize so we can get the region config
+        # Finaliser afin que nous puissions obtenir la configuration de la région
         instance.finalize!
 
-        # Get a lower level region
+        # Obtenir une région de niveau inférieur
         instance.get_region_config("us-east-1")
       end
 
@@ -285,7 +285,7 @@ aws_session_token= TOKuser3
       its("session_token")     { should == config_session_token }
     end
 
-    context "with a specific config set" do
+    context "avec un jeu de configuration spécifique" do
       let(:region_name) { "hashi-region" }
 
       subject do
@@ -310,21 +310,21 @@ aws_session_token= TOKuser3
       its("session_token")     { should == config_session_token }
     end
 
-    describe "inheritance of parent config" do
+    describe "héritage de la configuration parent" do
       let(:region_name) { "hashi-region" }
 
       subject do
-        # Set the values on a specific region
+        # Définir les valeurs sur une région spécifique
         instance.region_config region_name do |config|
           config.ami = "child"
         end
 
-        # Set some top-level values
+        # Définir des valeurs de niveau supérieur
         instance.access_key_id = "parent"
         instance.secret_access_key = "parent"
         instance.ami = "parent"
 
-        # Finalize and get the region
+        # Finaliser et obtenir la région
         instance.finalize!
         instance.get_region_config(region_name)
       end
@@ -334,9 +334,9 @@ aws_session_token= TOKuser3
       its("ami")           { should == "child" }
     end
 
-    describe "shortcut configuration" do
+    describe "configuration des raccourcis" do
       subject do
-        # Use the shortcut configuration to set some values
+        # Utilisez la configuration du raccourci pour définir certaines valeurs
         instance.region_config "us-east-1", :ami => "child"
         instance.finalize!
         instance.get_region_config("us-east-1")
@@ -349,7 +349,7 @@ aws_session_token= TOKuser3
       let(:first)  { described_class.new }
       let(:second) { described_class.new }
 
-      it "should merge the tags and block_device_mappings" do
+      it "devrait fusionner les balises et block_device_mappings" do
         first.tags["one"] = "one"
         second.tags["two"] = "two"
         first.package_tags["three"] = "three"
