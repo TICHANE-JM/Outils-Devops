@@ -3,9 +3,9 @@ source "https://rubygems.org"
 gemspec
 
 group :development do
-  # We depend on Vagrant for development, but we don't add it as a
-  # gem dependency because we expect to be installed within the
-  # Vagrant environment itself using `vagrant plugin`.
+  # Nous dépendons de Vagrant pour le développement, mais nous ne l'ajoutons pas en tant que dépendance
+  # de gemme car nous nous attendons à être installés dans l'environnement
+  # Vagrant lui-même en utilisant `vagrant plugin`.
   gem "vagrant", :git => "https://github.com/mitchellh/vagrant.git"
 end
 
