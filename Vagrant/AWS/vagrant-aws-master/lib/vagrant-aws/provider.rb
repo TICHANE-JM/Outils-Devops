@@ -9,35 +9,35 @@ module VagrantPlugins
       end
 
       def action(name)
-        # Attempt to get the action method from the Action class if it
-        # exists, otherwise return nil to show that we don't support the
-        # given action.
+        # Essayez d'obtenir la méthode d'action de la classe Action si elle existe,
+        # sinon retournez nil pour montrer que nous ne supportons
+        # pas l'action donnée.
         action_method = "action_#{name}"
         return Action.send(action_method) if Action.respond_to?(action_method)
         nil
       end
 
       def ssh_info
-        # Run a custom action called "read_ssh_info" which does what it
-        # says and puts the resulting SSH info into the `:machine_ssh_info`
-        # key in the environment.
+        # Exécutez une action personnalisée appelée "read_ssh_info" qui fait 
+        # ce qu'elle dit et place les informations SSH résultantes
+        # dans la clé `:machine_ssh_info` de l'environnement.
         env = @machine.action("read_ssh_info", lock: false)
         env[:machine_ssh_info]
       end
 
       def state
-        # Run a custom action we define called "read_state" which does
-        # what it says. It puts the state in the `:machine_state_id`
-        # key in the environment.
+        # Exécutez une action personnalisée que nous définissons appelée
+        # "read_state" qui fait ce qu'elle dit. Il place l'état dans la clé  
+        # `:machine_state_id` dans l'environnement.
         env = @machine.action("read_state", lock: false)
 
         state_id = env[:machine_state_id]
 
-        # Get the short and long description
+        # Obtenez la description courte et longue
         short = I18n.t("vagrant_aws.states.short_#{state_id}")
         long  = I18n.t("vagrant_aws.states.long_#{state_id}")
 
-        # Return the MachineState object
+        # Renvoyer l'objet MachineState
         Vagrant::MachineState.new(state_id, short, long)
       end
 
