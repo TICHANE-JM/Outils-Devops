@@ -1,8 +1,8 @@
 module VagrantPlugins
   module AWS
     module Action
-      # This can be used with "Call" built-in to check if the machine
-      # is stopped and branch in the middleware.
+      # Cela peut être utilisé avec "Call" intégré pour vérifier si la machine
+      # est arrêtée et branche dans le middleware.
       class IsStopped
         def initialize(app, env)
           @app = app
