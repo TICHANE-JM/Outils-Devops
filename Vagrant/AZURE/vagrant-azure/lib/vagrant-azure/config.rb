@@ -1,6 +1,6 @@
 # encoding: utf-8
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See License in the project root for license information.
+# Copyright (c) Microsoft Corporation. Tous les droits sont réservés.
+# Sous licence sous la licence MIT. Voir Licence dans la racine du projet pour les informations de licence.
 require 'vagrant'
 require 'haikunator'
 require 'vagrant-azure/util/managed_image_helper'
@@ -10,108 +10,108 @@ module VagrantPlugins
     class Config < Vagrant.plugin('2', :config)
       include VagrantPlugins::Azure::Util::ManagedImagedHelper
 
-      # The Azure Active Directory Tenant ID -- ENV['AZURE_TENANT_ID']
+      # ID de locataire Azure Active Directory -- ENV['AZURE_TENANT_ID']
       #
       # @return [String]
       attr_accessor :tenant_id
 
-      # The Azure Active Directory Application Client ID -- ENV['AZURE_CLIENT_ID']
+      # L'ID client de l'application Azure Active Directory -- ENV['AZURE_CLIENT_ID']
       #
       # @return [String]
       attr_accessor :client_id
 
-      # The Azure Active Directory Application Client Secret -- ENV['AZURE_CLIENT_SECRET']
+      # Le secret du client d'application Azure Active Directory -- ENV['AZURE_CLIENT_SECRET']
       #
       # @return [String]
       attr_accessor :client_secret
 
-      # The Azure Subscription ID to use -- ENV['AZURE_SUBSCRIPTION_ID']
+      # L'ID d'abonnement Azure à utiliser -- ENV['AZURE_SUBSCRIPTION_ID']
       #
       # @return [String]
       attr_accessor :subscription_id
 
-      # (Optional) Name of the resource group to use.
+      # (Facultatif) Nom du groupe de ressources à utiliser.
       #
       # @return [String]
       attr_accessor :resource_group_name
 
-      # (Optional) Azure location to build the VM -- defaults to 'westus'
+      # (Facultatif) Emplacement Azure pour créer la machine virtuelle – par défaut, "westus"
       #
       # @return [String]
       attr_accessor :location
 
-      # (Optional) Name of the virtual machine
+      # (Facultatif) Nom de la machine virtuelle
       #
       # @return [String]
       attr_accessor :vm_name
 
-      # (Optional) DNS Name prefix of the virtual machine
-      # Uses value of vm_name if not specified.
-      # Note: this must conform to the following regular expression:
+      # (Facultatif) Préfixe du nom DNS de la machine virtuelle
+      # Utilise la valeur de vm_name si elle n'est pas spécifiée.
+      # Remarque : ceci doit être conforme à l'expression régulière suivante :
       #
       #    ^[a-z][a-z0-9-]{1,61}[a-z0-9]
       #
-      # Therefore this field mustbe set if vm_name has capital letters (for ex.)
+      # Par conséquent, ce champ doit être défini si vm_name a des majuscules (par ex.)
       #
       # @return [String]
       attr_accessor :dns_name
 
-      # (Optional) Network Security Group Name prefix of the virtual machine
+      # (Facultatif) Préfixe du nom du groupe de sécurité réseau de la machine virtuelle
       #
       # @return [String]
       attr_accessor :nsg_name
 
-      # Password for the VM -- This is not recommended for *nix deployments
+      # Mot de passe pour la machine virtuelle -- Ceci n'est pas recommandé pour les déploiements *nix
       #
       # @return [String]
       attr_accessor :vm_password
 
-      # (Optional) VM size to be used -- defaults to 'Standard_D1'. See: https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-sizes/
+      # (Facultatif) Taille de machine virtuelle à utiliser – par défaut, "Standard_D1". Voir : https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-sizes/
       #
       # @return [String]
       attr_accessor :vm_size
 
-      # (Optional) Storage account type to be used -- defaults to 'Premium_LRS'. Alt value is 'Standard_LRS' See: https://docs.microsoft.com/en-us/azure/storage/storage-about-disks-and-vhds-linux
+      # (Facultatif) Type de compte de stockage à utiliser : par défaut, "Premium_LRS". La valeur alternative est 'Standard_LRS' Voir : https://docs.microsoft.com/en-us/azure/storage/storage-about-disks-and-vhds-linux
       #
       # @return [String]
       attr_accessor :vm_storage_account_type
 
-      # (Optional) Name of the virtual machine image URN to use -- defaults to 'canonical:ubuntuserver:16.04.0-DAILY-LTS:latest'. See: https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-cli-ps-findimage/
+      # (Facultatif) Nom de l'URN de l'image de la machine virtuelle à utiliser -- la valeur par défaut est 'canonical:ubuntuserver:16.04.0-DAILY-LTS:latest'. Voir : https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-cli-ps-findimage/
       #
       # @return [String]
       attr_accessor :vm_image_urn
 
-      # (Optional) Custom OS Image URI (like: http://mystorage1.blob.core.windows.net/vhds/myosdisk1.vhd) -- default nil.
+      # (Optional) URI d'image de système d'exploitation personnalisé (comme : http://mystorage1.blob.core.windows.net/vhds/myosdisk1.vhd) - néant par défaut.
       #
       # @return [String]
       attr_accessor :vm_vhd_uri
 
-      # (Optional) The Managed Image Id which will be used to build the VM
-      # (like: /subscriptions/{sub_id}/resourceGroups/{group_name}/providers/Microsoft.Compute/images/{image_name}) -- default nil.
+      # (Facultatif) L'ID d'image gérée qui sera utilisé pour créer la machine virtuelle
+      # (comme : /subscriptions/{sub_id}/resourceGroups/{group_name}/providers/Microsoft.Compute/images/{image_name}) - néant par défaut
       #
       # @return [String]
       attr_accessor :vm_managed_image_id
 
-      # (Optional unless using custom image) OS of the custom image
+      # (Facultatif sauf si vous utilisez une image personnalisée) Système d'exploitation de l'image personnalisée
       #
       # @return [String] "Linux" or "Windows"
       attr_accessor :vm_operating_system
 
-      # (Optional) Array of data disks to attach to the VM
+      # (Facultatif) Tableau de disques de données à attacher à la VM
       #
-      # sample of creating empty data disk
+      # exemple de création d'un disque de données vide
       #     {
       #         name: "mydatadisk1",
       #         size_gb: 30
       #     }
       #
-      # sample of attaching an existing VHD as a data disk
+      # exemple de connexion d'un VHD existant en tant que disque de données
       #     {
       #         name: "mydatadisk2",
       #         vhd_uri: "http://mystorage.blob.core.windows.net/vhds/mydatadisk2.vhd"
       #     },
       #
-      # sample of attaching a data disk from image
+      # exemple de connexion d'un disque de données à partir d'une image
       #     {
       #         name: "mydatadisk3",
       #         vhd_uri: "http://mystorage.blob.core.windows.net/vhds/mydatadisk3.vhd",
