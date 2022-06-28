@@ -1,0 +1,30 @@
+[
+	{
+		"name": "jessie",
+		"vmw_box": "bento/debian-8.6",
+		"vb_box": "debian/jessie64",
+		"ram": 512,
+		"vcpu": 1,
+		"ip_addr": "192.168.100.101",
+		"nested": false
+	},
+
+	{
+		"name": "trusty",
+		"vmw_box": "bento/ubuntu-14.04",
+		"vb_box": "ubuntu/trusty64",
+		"ram": 512,
+		"vcpu": 1,
+		"ip_addr": "192.168.100.102",
+		"nested": true
+	},
+
+	{
+		"name": "precise",
+		"vmw_box": "bento/ubuntu-12.04",
+		"vb_box": "ubuntu/precise64",
+		"ram": 512,
+		"vcpu": 1,
+		"ip_addr": "192.168.100.103"
+	}
+]
