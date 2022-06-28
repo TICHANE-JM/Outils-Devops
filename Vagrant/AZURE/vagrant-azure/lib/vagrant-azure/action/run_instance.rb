@@ -1,6 +1,6 @@
-# encoding: utf-8
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See License in the project root for license information.
+# encodage : utf-8
+# Copyright (c) Microsoft Corporation. Tous les droits sont réservés.
+# Licence sous la licence MIT. Voir Licence dans la racine du projet pour les informations de licence.
 require "log4r"
 require "json"
 require "azure_mgmt_resources"
@@ -24,12 +24,12 @@ module VagrantPlugins
         end
 
         def call(env)
-          # Initialize metrics if they haven't been
+          # Initialiser les métriques si elles n'ont pas été
           env[:metrics] ||= {}
 
           machine = env[:machine]
 
-          # Get the configs
+          # Obtenir les configurations
           config                         = machine.provider_config
 
           config.dns_name ||= config.vm_name
@@ -57,7 +57,7 @@ module VagrantPlugins
           dns_label_prefix               = config.dns_name
           nsg_label_prefix               = config.nsg_name
 
-          # Launch!
+          # Lancement!
           env[:ui].info(I18n.t('vagrant_azure.launching_instance'))
           env[:ui].info(" -- Management Endpoint: #{endpoint}")
           env[:ui].info(" -- Subscription Id: #{config.subscription_id}")
@@ -99,8 +99,8 @@ module VagrantPlugins
             virtualNetworkName:   virtual_network_name,
           }
 
-          # we need to pass different parameters depending upon the OS
-          # if custom image, then require vm_operating_system
+          # nous devons passer différents paramètres en fonction du système d'exploitation
+          # si image personnalisée, nécessite vm_operating_system
           operating_system = if vm_vhd_uri
                                vm_operating_system
                              elsif vm_managed_image_id
@@ -194,11 +194,11 @@ module VagrantPlugins
 
             @logger.info("Time for SSH/WinRM ready: #{env[:metrics]['instance_ssh_time']}")
 
-            # Ready and booted!
+            # Prêt et démarré !
             env[:ui].info(I18n.t('vagrant_azure.ready')) unless env[:interrupted]
           end
 
-          # Terminate the instance if we were interrupted
+          # Terminer l'instance si nous avons été interrompus
           terminate(env) if env[:interrupted]
 
           @app.call(env)
@@ -259,7 +259,7 @@ module VagrantPlugins
           azure.resources.resource_groups.create_or_update(name, params)
         end
 
-        # This method generates the deployment template
+        # Cette méthode génère le modèle de déploiement
         def render_deployment_template(options)
           self_signed_cert_resource = nil
           if options[:operating_system] == "Windows" && options[:winrm_install_self_signed_cert]
