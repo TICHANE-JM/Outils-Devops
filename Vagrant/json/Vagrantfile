@@ -1,0 +1,58 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Spécifiez la version de Vagrant, la version de l'API Vagrant et l'emplacement de clonage souhaité
+Vagrant.require_version '>= 1.6.0'
+VAGRANTFILE_API_VERSION = '2'
+
+# Nécessite le module 'json'
+require 'json'
+
+# Lire le fichier JSON avec les détails de la machine virtuelle (nom, boîte, RAM, CPU et adresse IP)
+machines = JSON.parse(File.read(File.join(File.dirname(__FILE__), 'machines.json')))
+
+# Créer et configurer les VM
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # Utilisez toujours la clé non sécurisée par défaut de Vagrant
+  config.ssh.insert_key = false
+
+  # Parcourir les entrées du fichier JSON pour créer des machines virtuelles
+  machines.each do |machine|
+    config.vm.define machine['name'] do |srv|
+
+      # Ne pas vérifier les mises à jour de la boîte
+      srv.vm.box_check_update = false
+      srv.vm.hostname = machine['name']
+      srv.vm.box = machine['vmw_box']
+
+      # Configurer le dossier synchronisé par défaut (désactiver par défaut)
+      if machine['sync_disabled'] != nil
+        srv.vm.synced_folder '.', '/vagrant', disabled: machine['sync_disabled']
+      else
+        srv.vm.synced_folder '.', '/vagrant', disabled: true
+      end #if machine['sync_disabled']
+
+      # Attribuer un réseau privé supplémentaire
+      if machine['ip_addr'] != nil
+        srv.vm.network 'private_network', ip: machine['ip_addr']
+      end # if machine['ip_addr']
+
+      # Configurez le CPU et la RAM selon les paramètres dans machines.json (Fusion)
+      srv.vm.provider 'vmware_fusion' do |vmw|
+        vmw.vmx['memsize'] = machine['ram']
+        vmw.vmx['numvcpus'] = machine['vcpu']
+        if machine['nested'] == true
+          vmw.vmx['vhv.enable'] = 'TRUE'
+        end #if machine['nested']
+      end # srv.vm.provider vmware_fusion
+
+      # Configurez le CPU et la RAM selon les paramètres dans machines.json (VirtualBox)
+      srv.vm.provider 'virtualbox' do |vb, override|
+        vb.memory = machine['ram']
+        vb.cpus = machine['vcpu']
+        override.vm.box = machine['vb_box']
+      end # srv.vm.provider virtualbox
+    end # config.vm.define
+  end # machines.each
+end # Vagrant.configure
