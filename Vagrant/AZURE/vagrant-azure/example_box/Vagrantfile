@@ -1,10 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# All Vagrant configuration is done below. The "2" in Vagrant.configure
-# configures the configuration version (we support older styles for
-# backwards compatibility). Please don't change it unless you know what
-# you're doing.
+# Toute la configuration de Vagrant se fait ci-dessous. Le "2" dans Vagrant.configure configure la version de configuration 
+# (nous prenons en charge les styles plus anciens pour une compatibilité descendante).
+# Veuillez ne pas le modifier à moins que vous ne sachiez ce que vous faites.
 
 Vagrant.configure('2') do |config|
   config.vm.box = 'azure'
