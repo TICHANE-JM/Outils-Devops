@@ -1,13 +1,13 @@
 # encoding: utf-8
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See License in the project root for license information.
+# Copyright (c) Microsoft Corporation. Tous les droits sont réservés.
+# Sous licence sous la licence MIT. Voir Licence dans la racine du projet pour les informations de licence.
 
 require "spec_helper"
 require "vagrant-azure/util/template_renderer"
 
 module VagrantPlugins
   module Azure
-    describe "deployment template" do
+    describe "modèle de déploiement" do
 
       let(:options) {
         {
@@ -18,70 +18,70 @@ module VagrantPlugins
         }
       }
 
-      describe "the basics" do
+      describe "Les bases" do
         let(:subject) {
           render(options)
         }
 
-        it "should specify schema" do
+        it "doit spécifier le schéma" do
           expect(subject["$schema"]).to eq("http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json")
         end
 
-        it "should specify content version" do
+        it "doit spécifier la version du contenu" do
           expect(subject["contentVersion"]).to eq("1.0.0.0")
         end
 
-        it "should have 10 parameters" do
+        it "devrait avoir 10 paramètres" do
           expect(subject["parameters"].count).to eq(10)
         end
 
-        it "should have 14 variables" do
+        it "devrait avoir 14 variables" do
           expect(subject["variables"].count).to eq(14)
         end
 
-        it "should have 5 resources" do
+        it "devrait avoir 5 ressources" do
           expect(subject["resources"].count).to eq(5)
         end
       end
 
-      describe "resources" do
-        describe "virtual machine" do
+      describe "Ressources" do
+        describe "machine virtuelle" do
           let(:subject) {
             render(options)["resources"].detect {|vm| vm["type"] == "Microsoft.Compute/virtualMachines"}
           }
 
-          it "should depend on 1 resources without an AV Set" do
+          it "devrait dépendre de 1 ressources sans AV Set" do
             expect(subject["dependsOn"].count).to eq(1)
           end
 
-          describe "with AV Set" do
+          describe "avec ensemble AV" do
             let(:subject) {
               template = render(options.merge(availability_set_name: "avSet"))
               template["resources"].detect {|vm| vm["type"] == "Microsoft.Compute/virtualMachines"}
             }
 
-            it "should depend on 2 resources with an AV Set" do
+            it "devrait dépendre de 2 ressources avec un AV Set" do
               expect(subject["dependsOn"].count).to eq(2)
             end
           end
 
-          describe "with managed disk reference" do
+          describe "avec référence de disque géré" do
             let(:subject) {
               template = render(options.merge(vm_managed_image_id: "image_id"))
               template["resources"].detect {|vm| vm["type"] == "Microsoft.Compute/virtualMachines"}
             }
 
-            it "should have an image reference id set to image_id" do
+            it "doit avoir un identifiant de référence d'image défini sur image_id" do
               expect(subject["properties"]["storageProfile"]["imageReference"]["id"]).to eq("image_id")
             end
           end
         end
 
-        describe "managed image" do
+        describe "image gérée" do
           let(:subject) {
             render(options)["resources"].detect {|vm| vm["type"] == "Microsoft.Compute/images"}
           }
-          describe "with custom vhd" do
+          describe "avec vhd personnalisé" do
             let(:vhd_uri_options) {
               options.merge(
                   vhd_uri: "https://my_image.vhd",
@@ -92,26 +92,26 @@ module VagrantPlugins
               render(vhd_uri_options)["resources"].detect {|vm| vm["type"] == "Microsoft.Compute/images"}
             }
 
-            it "should exist" do
+            it "devrait exister" do
               expect(subject).not_to be_nil
             end
 
-            it "should set the blob_uri" do
+            it "devrait définir le blob_uri" do
               expect(subject["properties"]["storageProfile"]["osDisk"]["blobUri"]).to eq(vhd_uri_options[:vhd_uri])
             end
 
-            it "should set the osType" do
+            it "devrait définir le osType" do
               expect(subject["properties"]["storageProfile"]["osDisk"]["osType"]).to eq(vhd_uri_options[:operating_system])
             end
           end
 
-          it "should not exist" do
+          it "ne devrait pas exister" do
             expect(subject).to be_nil
           end
         end
       end
 
-      describe "parameters" do
+      describe "paramètres" do
         let(:base_keys) {
           %w( storageAccountType adminUserName dnsLabelPrefix nsgLabelPrefix vmSize vmName subnetName virtualNetworkName
               winRmPort )
@@ -125,11 +125,11 @@ module VagrantPlugins
           render(options)["parameters"]
         }
 
-        it "should include all the *nix parameter keys" do
+        it "doit inclure toutes les clés de paramètre *nix" do
           expect(subject.keys).to contain_exactly(*nix_keys)
         end
 
-        describe "with Windows" do
+        describe "avec Windows" do
           let(:subject) {
             render(options.merge(operating_system: "Windows"))["parameters"]
           }
@@ -138,7 +138,7 @@ module VagrantPlugins
             base_keys + ["adminPassword"]
           }
 
-          it "should include all the windows parameter keys" do
+          it "doit inclure toutes les clés de paramètre Windows" do
             expect(subject.keys).to contain_exactly(*win_keys)
           end
         end
@@ -155,7 +155,7 @@ module VagrantPlugins
           render(options)["variables"]
         }
 
-        it "should include all the windows parameter keys" do
+        it "doit inclure toutes les clés de paramètre Windows" do
           expect(subject.keys).to contain_exactly(*keys)
         end
       end
