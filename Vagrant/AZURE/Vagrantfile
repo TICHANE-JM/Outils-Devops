@@ -1,0 +1,40 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Exiger le plug-in du fournisseur Azure et le module YAML
+require 'vagrant-azure'
+require 'yaml'
+
+# Lire le fichier YAML avec les informations d'instance
+instances = YAML.load_file(File.join(File.dirname(__FILE__), 'instances.yml'))
+
+# Spécifiez la version de Vagrant et la version de l'API Vagrant
+Vagrant.require_version '>= 1.6.0'
+VAGRANTFILE_API_VERSION = '2'
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'azure'
+
+# Créer et configurer la ou les instances Azure
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # Utiliser la boîte Azure factice
+  config.vm.box = 'azure-dummy'
+
+  # Spécifiez la clé SSH à utiliser
+  config.ssh.private_key_path = '~/.ssh/id_rsa'
+
+  # Configurer le fournisseur Azure
+  config.vm.provider 'azure' do |az, override|
+    # Extraire les informations sur le principal du service Azure AD à partir des variables d'environnement
+    az.tenant_id = ENV['AZURE_TENANT_ID']
+    az.client_id = ENV['AZURE_CLIENT_ID']
+    az.client_secret = ENV['AZURE_CLIENT_SECRET']
+    az.subscription_id = ENV['AZURE_SUBSCRIPTION_ID']
+
+    # Spécifier les paramètres de la machine virtuelle
+    az.vm_name = instances['name']
+    az.vm_size = instances['size']
+    az.admin_username = instances['user']
+    az.vm_image_urn = instances['image']
+    az.resource_group_name = instances['group']
+  end # config.vm.provider 'azure'
+end # Vagrant.configure
