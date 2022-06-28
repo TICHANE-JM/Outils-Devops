@@ -1,29 +1,29 @@
-# Vagrant Azure Example Box
+# Boîte d'exemple Vagrant Azure
 
-This directory contains the sample contents of a box for `azure` provider. Build this into a box using:
+Ce répertoire contient l'exemple de contenu d'une boîte pour le fournisseur `azure`. Construisez ceci dans une boîte en utilisant :
 
-On Windows:
+Sous Windows :
 ```
 C:\> bsdtar -cvzf azure.box metadata.json Vagrantfile
 ```
 
-On *Nix:
+Sur * Nix :
 ```
 $ tar cvzf azure.box ./metadata.json ./Vagrantfile
 ```
 
-You can add any defaults supported by the ```azure``` provider to the `Vagrantfile` in your box and Vagrant's built-in merging system will set them as defaults. Users can override these defaults in their own Vagrantfiles.
+Vous pouvez ajouter toutes les valeurs par défaut prises en charge par le fournisseur ```azure``` au `Vagrantfile` dans votre boîte et le système de fusion intégré de Vagrant les définira comme valeurs par défaut. Les utilisateurs peuvent remplacer ces valeurs par défaut dans leurs propres Vagrantfiles.
 
-You can specify the image to be used for the VM here via the ```vm_image``` option. E.g.,
+Vous pouvez spécifier ici l'image à utiliser pour la VM via l'option ```vm_image``` Par exemple.,
 
 ```ruby
 Vagrant.configure('2') do |config|
   config.vm.box = 'azure'
 
   config.vm.provider :azure do |azure|
-    azure.vm_image = 'NAME OF THE IMAGE TO USE'
+    azure.vm_image = 'NOM DE L'IMAGE A UTILISER'
   end
 end
 ```
 
-See also: [`Get-AzureVMImage`](http://msdn.microsoft.com/en-us/library/azure/dn495275.aspx)
+Voir également: [`Get-AzureVMImage`](http://msdn.microsoft.com/en-us/library/azure/dn495275.aspx)
