@@ -1,6 +1,6 @@
-# encoding: utf-8
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See License in the project root for license information.
+# encodage : utf-8
+# Copyright (c) Microsoft Corporation. Tous les droits sont réservés.
+# Licence sous la licence MIT. Voir Licence dans la racine du projet pour les informations de licence.
 require 'log4r'
 require 'vagrant-azure/util/machine_id_helper'
 
