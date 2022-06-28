@@ -8,6 +8,8 @@ Les fichiers contenu dans ce répertoire permettent aux utilisateurs d'utiliser 
 
 * **Vagrantfile** : Ce fichier est utilisé par Vagrant pour lancer l'instance AWS. deux modifications **doivent** être apportées à ce fichier pour qu'il fonctionne correctement : vous devez spécifier le chemin d'accès correct à votre clé privée SSH (la clé privée `keypair_name` spécifiées dans `instances.yml`), et n'oubliez pas de fournir le nom correct à la boîte installée pour une utilisation avec AWS.
 
+* **Le dossier vagrant-aws-master du plugin** : Avec ce plugin vous pourrez démarrer les instances , faire du SSH, provisionner les instances etc...
+
 ## Instructions :
 
 On va partir du fait que vous disposez d'un compte AWS, que vous connaissez votre ID de clé d'accès AWS et votre clé d'accès secrète, et que vous disposez d'une paire de clés SSH valide configurée dans votre compte AWS.
