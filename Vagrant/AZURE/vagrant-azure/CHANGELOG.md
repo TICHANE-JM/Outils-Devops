@@ -1,24 +1,23 @@
 ## 1.0.5 (09 May 2014)
 
-FEATURES
+CARACTÉRISTIQUES
 
-- Provision for windows VM.
-- Windows VM has to be specifically mentioned in the  Vagrantfile with
-  `config.vm.guest = :windows`
-- Chef, Puppet and Shell provision for Linux and Windows VM.
-- **SyncedFolders**
-- Linux VM uses `rsync` and has be mentioned in the VagrantFile.
-- Windows VM will default to use PowerShell to copy files.
+- Provision pour Windows VM.
+- La machine virtuelle Windows doit être spécifiquement mentionnée dans le fichier Vagrant avec `config.vm.guest = :windows`
+- Provisionnement de Chef, Puppet et Shell pour Linux et Windows VM.
+- **Dossiers synchronisés**
+- Linux VM utilise `rsync` et a été mentionné dans le VagrantFile.
+- La machine virtuelle Windows utilisera par défaut PowerShell pour copier les fichiers.
 
-IMPROVEMENTS
+AMÉLIORATIONS
 
-  - Better exception handling when VM fails to get created in cloud.
-  - Better exception handling for WinRM session errors.
+  - Meilleure gestion des exceptions lorsque la VM ne parvient pas à être créée dans le cloud.
+  - Meilleure gestion des exceptions pour les erreurs de session WinRM.
 
-BUGFIXES
+CORRECTIFS
 
-  - Cleaned up few typo in README
-  - Compatible with Vagrant 1.6 [GH-15]
+  - Correction de quelques fautes de frappe dans README
+  - Compatible avec Vagrant 1.6 [GH-15]
 
-## Previous
-See git commits
+## Précédent
+Voir les commits git
