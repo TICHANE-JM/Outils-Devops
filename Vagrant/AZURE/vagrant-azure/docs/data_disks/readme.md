@@ -3,7 +3,7 @@ Ce scénario créera une machine Ubuntu 16.04 avec des disques de données attac
 
 Pour plus d'informations sur ce scénario, voir [Comment attacher un disque de données à une machine virtuelle Linux](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/classic/attach-disk)
 
-Avant de tenter ce scénario, assurez-vous d'avoir suivi les [getting started docs](../../README.md#getting-started).
+Avant de tenter ce scénario, assurez-vous d'avoir suivi les [documentation de démarrage](../../README.md#getting-started).
 
 *Remarque : la prise en charge des disques de données est en préversion et sera probablement modifiée avant de devenir stable*
 
