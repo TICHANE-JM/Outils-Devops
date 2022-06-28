@@ -1,6 +1,6 @@
 # encoding: utf-8
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See License in the project root for license information.
+# Copyright (c) Microsoft Corporation. Tous les droits sont réservés.
+# Sous licence sous la licence MIT. Voir Licence dans la racine du projet pour les informations de licence.
 require 'pathname'
 require 'vagrant-azure/plugin'
 
@@ -10,7 +10,7 @@ module VagrantPlugins
     autoload :Action, lib_path.join('action')
     autoload :Errors, lib_path.join('errors')
 
-    # This returns the path to the source of this plugin.
+    # Cela renvoie le chemin vers la source de ce plugin.
     #
     # @return [Pathname]
     def self.source_root
