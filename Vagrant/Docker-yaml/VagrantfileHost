@@ -1,0 +1,61 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Spécifiez la version minimale de Vagrant et la version de l'API Vagrant
+Vagrant.require_version '>= 1.6.0'
+VAGRANTFILE_API_VERSION = '2'
+
+# Nécessite le module 'yaml'
+require 'yaml'
+
+# Lire le fichier YAML avec les détails de la machine virtuelle (boîte, CPU, RAM, adresses IP)
+# Modifiez host.yml pour modifier les détails de configuration de la machine virtuelle
+hostvms = YAML.load_file(File.join(File.dirname(__FILE__), 'hostvms.yml'))
+
+# Créer et configurer la ou les VM
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # Utilisez toujours la clé non sécurisée par défaut de Vagrant
+  config.ssh.insert_key = false
+
+  # Parcourir les entrées du fichier YAML pour créer des machines virtuelles
+  hostvms.each do |host|
+
+    # Configurez les VM selon les détails du fichier YAML
+    config.vm.define host['name'] do |srv|
+
+      # Ne pas vérifier les mises à jour de la boîte
+      srv.vm.box_check_update = false
+
+      # Spécifiez le nom d'hôte de la VM
+      srv.vm.hostname = host['name']
+
+      # Spécifiez la boîte Vagrant à utiliser (utilisez la boîte VMware par défaut)
+      srv.vm.box = host['vmw_box']
+
+      # Désactiver les dossiers synchronisés (empêche une erreur NFS sur "vagrant up")
+      srv.vm.synced_folder '.', '/vagrant', disabled: true
+
+      # Attribuer un réseau privé supplémentaire
+      if host['ip_addr'] != nil
+        srv.vm.network 'private_network', ip: host['ip_addr']
+      end # if host['ip_addr']
+
+      # Configurez le CPU et la RAM selon les paramètres dans hostvms.yml (Fusion)
+      srv.vm.provider 'vmware_fusion' do |vmw|
+        vmw.vmx['memsize'] = host['ram']
+        vmw.vmx['numvcpus'] = host['vcpu']
+      end # srv.vm.provider 'vmware_fusion'
+
+      # Configurez le CPU et la RAM par paramètres dans hostvms.yml (VirtualBox)
+      srv.vm.provider 'virtualbox' do |vb, override|
+        vb.memory = host['ram']
+        vb.cpus = host['vcpu']
+        override.vm.box = host['vb_box']
+      end # srv.vm.provider 'virtualbox'
+
+      # Provisionner la machine virtuelle avec Docker
+      srv.vm.provision 'docker'
+    end # config.vm.define
+  end # hostvsm.each
+end # Vagrant.configure
