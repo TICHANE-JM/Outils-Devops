@@ -1,6 +1,6 @@
-# encoding: utf-8
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See License in the project root for license information.
+# encodage : utf-8
+# Copyright (c) Microsoft Corporation. Tous les droits sont réservés.
+# Licence sous la licence MIT. Voir Licence dans la racine du projet pour les informations de licence.
 require 'log4r'
 require 'vagrant-azure/util/vm_status_translator'
 require 'vagrant-azure/util/machine_id_helper'
@@ -32,8 +32,8 @@ module VagrantPlugins
             vm = azure.compute.virtual_machines.get(parsed[:group], parsed[:name], 'instanceView')
           rescue MsRestAzure::AzureOperationError => ex
             if vm.nil? || tearing_down?(vm.instance_view.statuses)
-              # The machine can't be found
-              @logger.info('Machine not found or terminated, assuming it got destroyed.')
+              # la machine ne peut pas être trouvée
+              @logger.info('Machine introuvable ou arrêtée, en supposant qu'elle ait été détruite.')
               machine.id = nil
               return :not_created
             end
