@@ -3,8 +3,8 @@ require "vagrant-aws/util/timer"
 module VagrantPlugins
   module AWS
     module Action
-      # This is the same as the builtin provision except it times the
-      # provisioner runs.
+      # C'est la même chose que la disposition intégrée, sauf qu'elle chronomètre
+      # l'exécution de l'approvisionneur.
       class TimedProvision < Vagrant::Action::Builtin::Provision
         def run_provisioner(env, name, p)
           timer = Util::Timer.time do
