@@ -6,20 +6,17 @@ require 'vagrant/action/general/package'
 module VagrantPlugins
   module AWS
     module Action
-      # This action packages a running aws-based server into an
-      # aws-based vagrant box. It does so by burning the associated
-      # vagrant-aws server instance, into an AMI via fog. Upon
-      # successful AMI burning, the action will create a .box tarball
-      # writing a Vagrantfile with the fresh AMI id into it.
+      # Cette action regroupe un serveur basé sur aws en cours d'exécution dans une boîte vagrant basée sur aws. Pour ce faire, il grave
+      # l'instance de serveur vagrant-aws associée dans une AMI via fog. Une fois la gravure AMI réussie, l'action 
+      # créera une archive tar .box en écrivant un fichier Vagrant avec le nouvel identifiant AMI.
 
-      # Vagrant itself comes with a general package action, which 
-      # this plugin action does call. The general action provides
-      # the actual packaging as well as other options such as
-      # --include for including additional files and --vagrantfile
-      # which is pretty much not useful here anyway.
+      # Vagrant lui-même est livré avec une action de package générale, 
+      # que cette action de plugin appelle. L'action générale fournit 
+      # l'empaquetage réel ainsi que d'autres options telles que 
+      # --include pour inclure des fichiers supplémentaires et 
+      # --vagrantfile qui n'est pratiquement pas utile ici de toute façon.
 
-      # The virtualbox package plugin action was loosely used
-      # as a model for this class.
+      # L'action du plug-in du package virtualbox a été vaguement utilisée comme modèle pour cette classe.
 
       class PackageInstance < Vagrant::Action::General::Package
         include Vagrant::Util::Retryable
@@ -32,26 +29,26 @@ module VagrantPlugins
 
         alias_method :general_call, :call
         def call(env)
-          # Initialize metrics if they haven't been
+          # Initialiser les métriques si elles n'ont pas été
           env[:metrics] ||= {}
 
-          # This block attempts to burn the server instance into an AMI
+          # Ce bloc tente de graver l'instance de serveur dans une AMI
           begin
-            # Get the Fog server object for given machine
+            # Obtenir l'objet serveur Fog pour une machine donnée
             server = env[:aws_compute].servers.get(env[:machine].id)
 
             env[:ui].info(I18n.t("vagrant_aws.packaging_instance", :instance_id => server.id))
             
-            # Make the request to AWS to create an AMI from machine's instance
+            # Faire la demande à AWS pour créer une AMI à partir de l'instance de la machine
             ami_response = server.service.create_image server.id, "#{server.tags["Name"]} Package - #{Time.now.strftime("%Y%m%d-%H%M%S")}", ""
 
-            # Find ami id
+            # Trouver un identifiant ami
             @ami_id = ami_response.data[:body]["imageId"]
 
-            # Attempt to burn the aws instance into an AMI within timeout
+            # Tenter de graver l'instance aws dans une AMI dans le délai imparti
             env[:metrics]["instance_ready_time"] = Util::Timer.time do
               
-              # Get the config, to set the ami burn timeout
+              # Obtenez la configuration, pour définir le délai d'expiration ami burn
               region = env[:machine].provider_config.region
               region_config = env[:machine].provider_config.get_region_config(region)
               tries = region_config.instance_package_timeout / 2
@@ -61,16 +58,16 @@ module VagrantPlugins
                 server.service.create_tags(@ami_id, region_config.package_tags)
               end
 
-              # Check the status of the AMI every 2 seconds until the ami burn timeout has been reached
+              # Vérifiez l'état de l'AMI toutes les 2 secondes jusqu'à ce que le délai d'attente de gravure de l'ami soit atteint
               begin
                 retryable(:on => Fog::Errors::TimeoutError, :tries => tries) do
-                  # If we're interrupted don't worry about waiting
+                  # Si nous sommes interrompus, ne vous inquiétez pas d'attendre
                   next if env[:interrupted]
 
-                  # Need to update the ami_obj on each cycle
+                  # Besoin de mettre à jour l'ami_obj à chaque cycle
                   ami_obj = server.service.images.get(@ami_id)
 
-                  # Wait for the server to be ready, raise error if timeout reached 
+                  # Attendez que le serveur soit prêt, déclenchez une erreur si le délai d'attente est atteint 
                   server.wait_for(2) {
                     if ami_obj.state == "failed"
                       raise Errors::InstancePackageError, 
@@ -92,38 +89,38 @@ module VagrantPlugins
             raise Errors::FogError, :message => e.message
           end
 
-          # Handles inclusions from --include and --vagrantfile options
+          # Gère les inclusions des options --include et --vagrantfile
           setup_package_files(env)
 
-          # Setup the temporary directory for the tarball files
+          # Configurez le répertoire temporaire pour les fichiers tarball
           @temp_dir = env[:tmp_path].join(Time.now.to_i.to_s)
           env["export.temp_dir"] = @temp_dir
           FileUtils.mkpath(env["export.temp_dir"])
 
-          # Create the Vagrantfile and metadata.json files from templates to go in the box
+          # Créez les fichiers Vagrantfile et metadata.json à partir de modèles à mettre dans la boîte
           create_vagrantfile(env)
           create_metadata_file(env)
 
-          # Just match up a couple environmental variables so that
-          # the superclass will do the right thing. Then, call the
-          # superclass to actually create the tarball (.box file)
+          # Associez simplement quelques variables environnementales pour que
+          # la superclasse fasse ce qu'il faut. Ensuite, appelez la
+          # superclasse pour créer réellement l'archive tar (fichier .box)
           env["package.directory"] = env["export.temp_dir"]
           general_call(env)
           
-          # Always call recover to clean up the temp dir
+          # Appelez toujours recovery pour nettoyer le répertoire temporaire
           clean_temp_dir
         end
 
         protected
 
-        # Cleanup temp dir and files
+        # Nettoyer le répertoire et les fichiers temporaires
         def clean_temp_dir
           if @temp_dir && File.exist?(@temp_dir)
             FileUtils.rm_rf(@temp_dir)
           end
         end
 
-        # This method generates the Vagrantfile at the root of the box. Taken from 
+        # Cette méthode génère le Vagrantfile à la racine de la boîte. Pris à partir de 
         # VagrantPlugins::ProviderVirtualBox::Action::PackageVagrantfile
         def create_vagrantfile env
           File.open(File.join(env["export.temp_dir"], "Vagrantfile"), "w") do |f|
@@ -135,7 +132,7 @@ module VagrantPlugins
           end
         end
 
-        # This method generates the metadata.json file at the root of the box.
+        # Cette méthode génère le fichier metadata.json à la racine de la box.
         def create_metadata_file env
           File.open(File.join(env["export.temp_dir"], "metadata.json"), "w") do |f|
             f.write(TemplateRenderer.render("metadata.json", {
@@ -144,44 +141,44 @@ module VagrantPlugins
           end
         end
 
-        # Sets up --include and --vagrantfile files which may be added as optional
-        # parameters. Taken from VagrantPlugins::ProviderVirtualBox::Action::SetupPackageFiles
+        # Configure les fichiers --include et --vagrantfile qui peuvent être ajoutés en paramètre optionnel
+        # Pris à partir de VagrantPlugins::ProviderVirtualBox::Action::SetupPackageFiles
         def setup_package_files(env)
           files = {}
           env["package.include"].each do |file|
             source = Pathname.new(file)
             dest   = nil
 
-            # If the source is relative then we add the file as-is to the include
-            # directory. Otherwise, we copy only the file into the root of the
-            # include directory. Kind of strange, but seems to match what people
-            # expect based on history.
+            # Si la source est relative, nous ajoutons le fichier tel quel au répertoire d'inclusion. 
+            # Sinon, nous copions uniquement le fichier à la racine du répertoire d'inclusion.
+            # Un peu étrange, mais semble correspondre à ce que les
+            # gens attendent en fonction de l'histoire.
             if source.relative?
               dest = source
             else
               dest = source.basename
             end
 
-            # Assign the mapping
+            # Attribuer le mappage
             files[file] = dest
           end
 
           if env["package.vagrantfile"]
-            # Vagrantfiles are treated special and mapped to a specific file
+            # Les fichiers vagabonds sont traités de manière spéciale et mappés à un fichier spécifique
             files[env["package.vagrantfile"]] = "_Vagrantfile"
           end
 
-          # Verify the mapping
+          # Vérifier le mappage
           files.each do |from, _|
             raise Vagrant::Errors::PackageIncludeMissing,
               file: from if !File.exist?(from)
           end
 
-          # Save the mapping
+          # Enregistrer le mappage
           env["package.files"] = files
         end
 
-        # Used to find the base location of aws-vagrant templates
+        # Utilisé pour trouver l'emplacement de base des modèles aws-vagrant
         def template_root
           AWS.source_root.join("templates")
         end
