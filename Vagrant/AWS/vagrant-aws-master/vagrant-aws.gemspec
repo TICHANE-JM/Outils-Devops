@@ -23,11 +23,10 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec", "~> 3.4"
   s.add_development_dependency "rspec-its"
 
-  # The following block of code determines the files that should be included
-  # in the gem. It does this by reading all the files in the directory where
-  # this gemspec is, and parsing out the ignored files from the gitignore.
-  # Note that the entire gitignore(5) syntax is not supported, specifically
-  # the "!" syntax, but it should mostly work correctly.
+  # Le bloc de code suivant détermine les fichiers qui doivent être inclus dans la gemme. Pour ce faire, il lit tous les fichiers du répertoire
+  # où se trouve cette gemspec et analyse les fichiers ignorés du gitignore.
+  # Notez que toute la syntaxe gitignore(5) n'est pas prise en charge, en particulier le "!" syntaxe,
+  # mais cela devrait généralement fonctionner correctement.
   root_path      = File.dirname(__FILE__)
   all_files      = Dir.chdir(root_path) { Dir.glob("**/{*,.*}") }
   all_files.reject! { |file| [".", ".."].include?(File.basename(file)) }
@@ -37,16 +36,14 @@ Gem::Specification.new do |s|
   gitignore.reject! { |line| line.empty? || line =~ /^(#|!)/ }
 
   unignored_files = all_files.reject do |file|
-    # Ignore any directories, the gemspec only cares about files
+    # Ignorez tous les répertoires, le gemspec ne se soucie que des fichiers
     next true if File.directory?(file)
 
-    # Ignore any paths that match anything in the gitignore. We do
-    # two tests here:
-    #
-    #   - First, test to see if the entire path matches the gitignore.
-    #   - Second, match if the basename does, this makes it so that things
-    #     like '.DS_Store' will match sub-directories too (same behavior
-    #     as git).
+    # Ignorez tous les chemins qui correspondent à quoi que ce soit dans le gitignore. 
+    # Nous faisons deux tests ici :   
+    #   - Tout d'abord, testez pour voir si le chemin entier correspond au gitignore.
+    #   - Deuxièmement, correspond si le nom de base le fait, cela fait en sorte que des choses comme '.DS_Store'
+    #   correspondent également aux sous-répertoires (même comportement que git).
     #
     gitignore.any? do |ignore|
       File.fnmatch(ignore, file, File::FNM_PATHNAME) ||
