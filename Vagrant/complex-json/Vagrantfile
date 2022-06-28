@@ -1,0 +1,68 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Spécifiez la version minimale de Vagrant et la version de l'API Vagrant
+Vagrant.require_version '>= 1.6.0'
+VAGRANTFILE_API_VERSION = '2'
+
+# Nécessite le module 'json'
+require 'json'
+
+# Lire le fichier JSON avec les détails de la machine virtuelle (nom, boîte, RAM, CPU et adresse IP)
+machines = JSON.parse(File.read(File.join(File.dirname(__FILE__), 'machines.json')))
+
+# Créer et configurer les VM
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # Utilisez toujours la clé non sécurisée par défaut de Vagrant
+  config.ssh.insert_key = false
+
+  # Parcourir les entrées du fichier JSON pour créer une machine virtuelle
+  machines.each do |machine|
+
+    # Configurez les VM selon les détails dans machines.yml
+    config.vm.define machine['name'] do |srv|
+
+      # Ne pas vérifier les mises à jour de la boîte
+      srv.vm.box_check_update = false
+
+      # Spécifiez le nom d'hôte de la VM
+      srv.vm.hostname = machine['name']
+
+      # Spécifiez la boîte Vagrant à utiliser (utilisez la boîte VMware par défaut)
+      srv.vm.box = machine['box']['vmw']
+
+      # Configurer le dossier synchronisé par défaut (désactiver par défaut)
+      if machine['sync_disabled'] != nil
+        srv.vm.synced_folder '.', '/vagrant', disabled: machine['sync_disabled']
+      else
+        srv.vm.synced_folder '.', '/vagrant', disabled: true
+      end #if machine['sync_disabled']
+
+      # Itérer à travers les réseaux selon les paramètres dans machines.yml
+      machine['nics'].each do |net|
+        if net['ip_addr'] == 'dhcp'
+          srv.vm.network net['type'], type: net['ip_addr']
+        else
+          srv.vm.network net['type'], ip: net['ip_addr']
+        end # if net['ip_addr']
+      end # machine['nics'].each
+
+      # Configurez le CPU et la RAM selon les paramètres dans machines.yml (Fusion)
+      srv.vm.provider 'vmware_fusion' do |vmw|
+        vmw.vmx['memsize'] = machine['ram']
+        vmw.vmx['numvcpus'] = machine['vcpu']
+        if machine['nested'] == true
+          vmw.vmx['vhv.enable'] = 'TRUE'
+        end #if machine['nested']
+      end # srv.vm.provider 'vmware_fusion'
+
+      # Configurez le CPU et la RAM selon les paramètres dans machines.yml (VirtualBox)
+      srv.vm.provider 'virtualbox' do |vb, override|
+        vb.memory = machine['ram']
+        vb.cpus = machine['vcpu']
+        override.vm.box = machine['box']['vb']
+      end # srv.vm.provider 'virtualbox'
+    end # config.vm.define
+  end # machines.each
+end # Vagrant.configure
