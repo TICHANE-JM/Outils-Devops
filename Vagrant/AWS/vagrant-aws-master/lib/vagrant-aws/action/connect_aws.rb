@@ -4,9 +4,9 @@ require "log4r"
 module VagrantPlugins
   module AWS
     module Action
-      # This action connects to AWS, verifies credentials work, and
-      # puts the AWS connection object into the `:aws_compute` key
-      # in the environment.
+      # Cette action se connecte à AWS, vérifie le travail des informations d'identification
+      # et place l'objet de connexion AWS dans la clé 
+      # `:aws_compute` de l'environnement.
       class ConnectAWS
         def initialize(app, env)
           @app    = app
@@ -14,13 +14,13 @@ module VagrantPlugins
         end
 
         def call(env)
-          # Get the region we're going to booting up in
+          # Obtenez la région dans laquelle nous allons démarrer
           region = env[:machine].provider_config.region
 
-          # Get the configs
+          # Obtenir les configurations
           region_config = env[:machine].provider_config.get_region_config(region)
 
-          # Build the fog config
+          # Construire la configuration du fog
           fog_config = {
             :provider => :aws,
             :region   => region
