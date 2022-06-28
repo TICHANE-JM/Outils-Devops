@@ -4,7 +4,7 @@ require "json"
 module VagrantPlugins
   module AWS
     module Action
-      # This terminates the running instance.
+      # Cela met fin à l'instance en cours d'exécution.
       class TerminateInstance
         def initialize(app, env)
           @app    = app
@@ -18,14 +18,14 @@ module VagrantPlugins
 
           elastic_ip     = region_config.elastic_ip
 
-          # Release the elastic IP
+          # Libère l'IP élastique
           ip_file = env[:machine].data_dir.join('elastic_ip')
           if ip_file.file?
             release_address(env,ip_file.read)
             ip_file.delete
           end
 
-          # Destroy the server and remove the tracking ID
+          # Détruisez le serveur et supprimez l'ID de suivi
           env[:ui].info(I18n.t("vagrant_aws.terminating"))
           server.destroy
           env[:machine].id = nil
@@ -33,10 +33,10 @@ module VagrantPlugins
           @app.call(env)
         end
 
-        # Release an elastic IP address
+        # Libérer une adresse IP élastique
         def release_address(env,eip)
           h = JSON.parse(eip)
-          # Use association_id and allocation_id for VPC, use public IP for EC2
+          # Utilisez association_id et allocation_id pour VPC, utilisez une adresse IP publique pour EC2
           if h['association_id']
             env[:aws_compute].disassociate_address(nil,h['association_id'])
             env[:aws_compute].release_address(h['allocation_id'])
