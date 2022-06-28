@@ -1,159 +1,159 @@
 en:
   vagrant_aws:
     already_status: |-
-      The machine is already %{status}.
+      La machine est déjà %{status}.
     burning_ami: |-
-      Waiting for the AMI '%{ami_id}' to burn...
+     En attente de gravure de l'AMI '%{ami_id}'...
     elb:
       adjusting: |-
-        Adjusting availability zones of ELB %{elb_name}...
+        Ajustement des zones de disponibilité d'ELB %{elb_name}...
       registering: |-
-        Registering %{instance_id} at ELB %{elb_name}...
+        Enregistrement de %{instance_id} à ELB %{elb_name}...
       deregistering: |-
-        Deregistering %{instance_id} from ELB %{elb_name}...
+        Désenregistrement de %{instance_id} d'ELB %{elb_name}...
       ok: |-
         ok
       skipped: |-
-        skipped
+        sauté
 
     launching_instance: |-
-      Launching an instance with the following settings...
+      Lancement d'une instance avec les paramètres suivants...
     launch_no_keypair: |-
-      Warning! You didn't specify a keypair to launch your instance with.
-      This can sometimes result in not being able to access your instance.
+      Avertissement! Vous n'avez pas spécifié de paire de clés avec laquelle lancer votre instance.
+      Cela peut parfois entraîner l'impossibilité d'accéder à votre instance.
     launch_vpc_warning: |-
-      Warning! You're launching this instance into a VPC without an
-      elastic IP. Please verify you're properly connected to a VPN so
-      you can access this machine, otherwise Vagrant will not be able
-      to SSH into it.
+      Avertissement! Vous lancez cette instance dans un VPC sans
+      IP élastique. Veuillez vérifier que vous êtes correctement connecté à un VPN afin
+      de pouvoir accéder à cette machine, sinon Vagrant ne pourra pas
+      s'y connecter en SSH.
     not_created: |-
-      Instance is not created. Please run `vagrant up` first.
+      L'instance n'est pas créée. Veuillez d'abord lancer "vagrant up".
     packaging_instance: |-
-      Burning instance %{instance_id} into an ami
+      Gravure de l'instance %{instance_id} dans un ami
     packaging_instance_complete: |-
-      Burn was successful in %{time_seconds}s
+      La gravure a réussi en %{time_seconds}s
     ready: |-
-      Machine is booted and ready for use!
+      La machine est démarrée et prête à l'emploi !
     rsync_not_found_warning: |-
-      Warning! Folder sync disabled because the rsync binary is missing in the %{side}.
-      Make sure rsync is installed and the binary can be found in the PATH.
+      Avertissement! Synchronisation des dossiers désactivée car le binaire rsync est manquant dans le %{side}.
+      Assurez-vous que rsync est installé et que le binaire se trouve dans le PATH.
     rsync_folder: |-
       Rsyncing folder: %{hostpath} => %{guestpath}
     source_dest_checks_no_vpc: |-
-      Warning! Ignoring source_dest_checks flag as it can only be configured on
-      a VPC instance.
+      Avertissement! Ignorer l'indicateur source_dest_checks car il ne peut être configuré que sur
+      une instance VPC.
     starting: |-
-      Starting the instance...
+      Démarrage de l'instance...
     stopping: |-
-      Stopping the instance...
+      Arrêt de l'instance...
     terminating: |-
-      Terminating the instance...
+      Arrêt de l'instance...
     waiting_for_ready: |-
-      Waiting for instance to become "ready"...
+      En attendant par exemple d'être "prêt"...
     waiting_for_ssh: |-
-      Waiting for SSH to become available...
+      En attendant que SSH soit disponible...
     warn_networks: |-
-      Warning! The AWS provider doesn't support any of the Vagrant
-      high-level network configurations (`config.vm.network`). They
-      will be silently ignored.
+      Avertissement! Le fournisseur AWS ne prend en charge aucune des
+      configurations réseau de haut niveau de Vagrant (`config.vm.network`).
+      Ils seront ignorés en silence.
     warn_ssh_access: |-
-      Warning! Vagrant might not be able to SSH into the instance.
-      Please check your security groups settings.
+      Avertissement! Vagrant peut ne pas être en mesure de se connecter en SSH à l'instance.
+     Veuillez vérifier les paramètres de vos groupes de sécurité.
     will_not_destroy: |-
-      The instance '%{name}' will not be destroyed, since the confirmation
-      was declined.
+      L'instance '%{name}' ne sera pas détruite,
+      car la confirmation a été refusée.
 
     config:
       access_key_id_required: |-
-        An access key ID must be specified via "access_key_id"
+        Un ID de clé d'accès doit être spécifié via "access_key_id"
       ami_required: |-
-        An AMI must be configured via "ami" (region: #{region})
+        Une AMI doit être configurée via "ami" (région : #{region})
       private_key_missing: |-
-        The specified private key for AWS could not be found
+        La clé privée spécifiée pour AWS est introuvable
       region_required: |-
-        A region must be specified via "region"
+        Une région doit être spécifiée via "région"
       secret_access_key_required: |-
-        A secret access key is required via "secret_access_key"
+        Une clé d'accès secrète est requise via "secret_access_key"
       subnet_id_required_with_public_ip: |-
-        If you assign a public IP address to an instance in a VPC, a subnet must be specifed via "subnet_id"
+        Si vous attribuez une adresse IP publique à une instance dans un VPC, un sous-réseau doit être spécifié via "subnet_id"
       aws_info_required: |-
-        One or more of the needed AWS credentials are missing. No environment variables
-        are set nor profile '%{profile}' exists at '%{location}'
+        Une ou plusieurs des informations d'identification AWS nécessaires sont manquantes. Aucune variable 
+        d'environnement n'est définie ni le profil '%{profile}' existe à '%{location}'
 
     errors:
       fog_error: |-
-        There was an error talking to AWS. The error message is shown
+        Une erreur s'est produite lors de la communication avec AWS. Le message d'erreur s'affiche
         below:
 
         %{message}
       internal_fog_error: |-
-        There was an error talking to AWS. The error message is shown
+        Une erreur s'est produite lors de la communication avec AWS. Le message d'erreur s'affiche
         below:
 
         Error: %{error}
         Response: %{response}
       instance_ready_timeout: |-
-        The instance never became "ready" in AWS. The timeout currently
-        set waiting for the instance to become ready is %{timeout} seconds.
-        Please verify that the machine properly boots. If you need more time
-        set the `instance_ready_timeout` configuration on the AWS provider.
+        L'instance n'est jamais devenue "prête" dans AWS. Le délai d'attente 
+        actuellement défini pour que l'instance soit prête est de %{timeout} secondes.
+        Veuillez vérifier que la machine démarre correctement. Si vous avez besoin
+        de plus de temps, définissez la configuration `instance_ready_timeout` sur le fournisseur AWS.
       instance_package_error: |-
-        There was an error packaging the instance. See details below for more info.
+        Une erreur s'est produite lors de l'empaquetage de l'instance. Voir les détails ci-dessous pour plus d'informations.
 
         AMI Id: %{ami_id}
         Error: %{err}
       instance_package_timeout: |-
-        The AMI failed to become "ready" in AWS. The timeout currently
-        set waiting for the instance to become ready is %{timeout} seconds. For 
-        larger instances AMI burning may take long periods of time. Please
-        ensure the timeout is set high enough, it can be changed by adjusting
-        the `instance_package_timeout` configuration on the AWS provider.
+        L'AMI n'a pas réussi à devenir "prête" dans AWS. Le délai d'attente actuellement défini 
+        pour que l'instance soit prête est de %{timeout} secondes. Pour les 
+        instances plus importantes, la gravure AMI peut prendre de longues périodes.
+        Veuillez vous assurer que le délai d'attente est suffisamment élevé, il peut être modifié en ajustant la 
+        configuration `instance_package_timeout` sur le fournisseur AWS.
       rsync_error: |-
-        There was an error when attempting to rsync a shared folder.
-        Please inspect the error message below for more info.
+        Une erreur s'est produite lors de la tentative de synchronisation d'un dossier partagé.
+        Veuillez consulter le message d'erreur ci-dessous pour plus d'informations.
 
         Host path: %{hostpath}
         Guest path: %{guestpath}
         Error: %{stderr}
       mkdir_error: |-
-        There was an error when attempting to create a shared host folder.
-        Please inspect the error message below for more info.
+        Une erreur s'est produite lors de la tentative de création d'un dossier hôte partagé.
+        Veuillez consulter le message d'erreur ci-dessous pour plus d'informations.
 
         Host path: %{hostpath}
         Error: %{err}
       elb_does_not_exist: |-
-        ELB configured for the instance does not exist
+        ELB configuré pour l'instance n'existe pas
 
     states:
       short_not_created: |-
-        not created
+        non créé
       long_not_created: |-
-        The EC2 instance is not created. Run `vagrant up` to create it.
+        L'instance EC2 n'est pas créée. Exécutez `vagrant up` pour le créer.
 
       short_stopped: |-
-        stopped
+        arrêté
       long_stopped: |-
-        The EC2 instance is stopped. Run `vagrant up` to start it.
+        L'instance EC2 est arrêtée. Exécutez `vagrant up` pour le démarrer.
 
       short_stopping: |-
-        stopping
+        arrêt
       long_stopping: |-
-        The EC2 instance is stopping. Wait until is completely stopped to
-        run `vagrant up` and start it.
+        L'instance EC2 s'arrête. Attendez qu'il soit complètement arrêté pour
+        exécuter `vagrant up` et démarrez-le.
 
       short_pending: |-
-        pending
+        En attente
       long_pending: |-
-        The EC2 instance is pending a start (i.e. this is a transition state).
+        L'instance EC2 est en attente de démarrage (c'est-à-dire qu'il s'agit d'un état de transition).
 
       short_running: |-
-        running
+        En fonctionnement
       long_running: |-
-        The EC2 instance is running. To stop this machine, you can run
-        `vagrant halt`. To destroy the machine, you can run `vagrant destroy`.
+        L'instance EC2 est en cours d'exécution. Pour arrêter cette machine, vous pouvez exécuter
+        `vagrant halt`. Pour détruire la machine, vous pouvez exécuter `vagrant destroy`.
 
       short_pending: |-
-        pending
+        Suspendu
       long_pending: |-
-        The EC2 instance is still being initialized. To destroy this machine,
-        you can run `vagrant destroy`.
+        L'instance EC2 est toujours en cours d'initialisation. Pour détruire cette machine,
+        vous pouvez exécuter `vagrant destroy`.
