@@ -14,7 +14,7 @@ On va partir du fait que vous disposez d'un compte AWS, que vous connaissez votr
 
 1. Vagrant exige qu'une "boîte`factice" soit installée pour être utilisée avec AWS. Exécutez cette commande pour installer cette boîte :
 ```Shell
-vagrant box add <box-name> https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box
+vagrant box add <box-name> https://github.com/TICHANE-JM/Outils-Devops/blob/main/Vagrant/AWS/vagrant-aws-master/dummy.box
 ```
 
 2. Installer le fournisseur AWS Vagrant en exécutant `vagrant plugin install vagrant*aws`.
