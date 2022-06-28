@@ -1,53 +1,53 @@
 AllCops:
   TargetRubyVersion: 2.2
-  # RuboCop has a bunch of cops enabled by default. This setting tells RuboCop
-  # to ignore them, so only the ones explicitly set in this file are enabled.
+  # RuboCop a un tas de flics activés par défaut. 
+  # Ce paramètre indique à RuboCop de les ignorer, de sorte que seuls ceux définis explicitement dans ce fichier sont activés.
   DisabledByDefault: true
 
 # Prefer &&/|| over and/or.
 Style/AndOr:
   Enabled: true
 
-# Do not use braces for hash literals when they are the last argument of a
-# method call.
+# N'utilisez pas d'accolades pour les littéraux de hachage lorsqu'ils sont le dernier argument 
+# d'un appel de méthode.
 Style/BracesAroundHashParameters:
   Enabled: true
 
-# Align `when` with `case`.
+# Alignez `when` avec `case`.
 Style/CaseIndentation:
   Enabled: true
 
-# Align comments with method definitions.
+# Alignez les commentaires avec les définitions de méthode.
 Style/CommentIndentation:
   Enabled: true
 
-# No extra empty lines.
+# Pas de lignes vides supplémentaires.
 Style/EmptyLines:
   Enabled: true
 
-# In a regular class definition, no empty lines around the body.
+# Dans une définition de classe normale, pas de lignes vides autour du corps.
 Style/EmptyLinesAroundClassBody:
   Enabled: true
 
-# In a regular method definition, no empty lines around the body.
+# Dans une définition de méthode régulière, pas de lignes vides autour du corps.
 Style/EmptyLinesAroundMethodBody:
   Enabled: true
 
-# In a regular module definition, no empty lines around the body.
+# Dans une définition de module standard, pas de lignes vides autour du corps.
 Style/EmptyLinesAroundModuleBody:
   Enabled: true
 
-# Use Ruby >= 1.9 syntax for hashes. Prefer { a: :b } over { :a => :b }.
+# Utilisez la syntaxe Ruby >= 1.9 pour les hachages. Préférez { a: :b } à { :a => :b }.
 Style/HashSyntax:
   Enabled: true
 
-# Method definitions after `private` or `protected` isolated calls need one
-# extra level of indentation.
+# Les définitions de méthode après les appels isolés "privés" ou "protégés" nécessitent un
+# niveau d'indentation supplémentaire.
 Style/IndentationConsistency:
   Enabled: true
   EnforcedStyle: rails
 
-# Two spaces, no tabs (for indentation).
+# Deux espaces, pas de tabulation (pour l'indentation).
 Style/IndentationWidth:
   Enabled: true
 
@@ -69,52 +69,52 @@ Style/SpaceAroundOperators:
 Style/SpaceBeforeFirstArg:
     Enabled: true
 
-# Defining a method with parameters needs parentheses.
+# Définir une méthode avec des paramètres nécessite des parenthèses.
 Style/MethodDefParentheses:
   Enabled: true
 
-# Use `foo {}` not `foo{}`.
+# Utilisez `foo {}` et non `foo{}`.
 Style/SpaceBeforeBlockBraces:
   Enabled: true
 
-# Use `foo { bar }` not `foo {bar}`.
+# Utilisez `foo {bar}` et non `foo {bar}`.
 Style/SpaceInsideBlockBraces:
   Enabled: true
 
-# Use `{ a: 1 }` not `{a:1}`.
+# Utilisez `{ a : 1 }` et non `{a:1}`.
 Style/SpaceInsideHashLiteralBraces:
   Enabled: true
 
 Style/SpaceInsideParens:
   Enabled: true
 
-# Check quotes usage according to lint rule below.
+# Vérifiez l'utilisation des quotes conformément à la règle ci-dessous.
 Style/StringLiterals:
   Enabled: true
   EnforcedStyle: double_quotes
 
-# Detect hard tabs, no hard tabs.
+# Détecter les onglets durs, pas d'onglets durs.
 Style/Tab:
   Enabled: true
 
-# Blank lines should not have any spaces.
+# Les lignes vides ne doivent pas avoir d'espaces.
 Style/TrailingBlankLines:
   Enabled: true
 
-# No trailing whitespace.
+# Aucun espace de fin.
 Style/TrailingWhitespace:
   Enabled: true
 
-# Use quotes for string literals when they are enough.
+# Utilisez des guillemets pour les littéraux de chaîne lorsqu'ils sont suffisants.
 Style/UnneededPercentQ:
   Enabled: true
 
-# Align `end` with the matching keyword or starting expression except for
-# assignments, where it should be aligned with the LHS.
+# Alignez `end` avec le mot-clé correspondant ou l'expression de début, sauf pour les 
+# affectations, où il doit être aligné avec le LHS.
 Lint/EndAlignment:
   Enabled: true
   EnforcedStyleAlignWith: variable
 
-# Use my_method(my_arg) not my_method( my_arg ) or my_method my_arg.
+# Utilisez my_method(my_arg) et non my_method( my_arg ) ou my_method my_arg.
 Lint/RequireParentheses:
   Enabled: true
