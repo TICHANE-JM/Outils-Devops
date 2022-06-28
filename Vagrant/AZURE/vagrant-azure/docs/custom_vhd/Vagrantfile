@@ -2,12 +2,12 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "azure"
 
-  # use local ssh key to connect to remote vagrant box
+  # utiliser la clé ssh locale pour se connecter à la boîte distante Vagrant
   config.ssh.private_key_path = "~/.ssh/id_rsa"
   config.vm.provider :azure do |azure, override|
     azure.location = "westus"
 
-    # change this URI to your storage account blob within the same region as specified above
+    # remplacez cet URI par le blob de votre compte de stockage dans la même région que celle spécifiée ci-dessus
     azure.vm_vhd_uri = "https://vagrantimages.blob.core.windows.net/vhds/xenial-server-cloudimg-amd64-disk1.vhd"
     azure.vm_operating_system = "Linux"
   end
