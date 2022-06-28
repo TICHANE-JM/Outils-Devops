@@ -1,6 +1,6 @@
 # encoding: utf-8
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See License in the project root for license information.
+# Copyright (c) Microsoft Corporation. Tous les droits sont réservés.
+# Sous licence sous la licence MIT. Voir Licence dans la racine du projet pour les informations de licence.
 require 'log4r'
 require 'vagrant'
 
@@ -11,28 +11,28 @@ module VagrantPlugins
       def initialize(machine)
         @machine = machine
 
-        # Load the driver
+        # Charger le pilote
         machine_id_changed
 
-        # turn off nfs functionality by default, so the machine will fall back to rsync by default
+        # désactiver la fonctionnalité nfs par défaut, afin que la machine revienne à rsync par défaut
         @machine.config.nfs.functional = false
         @machine.config.winrm.password = @machine.provider_config.admin_password
         @machine.config.winrm.username = @machine.provider_config.admin_username
       end
 
       def action(name)
-        # Attempt to get the action method from the Action class if it
-        # exists, otherwise return nil to show that we don't support the
-        # given action.
+        # Essayez d'obtenir la méthode d'action de la classe Action
+        # si elle existe, sinon retournez nil pour montrer que
+        # nous ne supportons pas l'action donnée.
         action_method = "action_#{name}"
         return Action.send(action_method) if Action.respond_to?(action_method)
         nil
       end
 
       def ssh_info
-        # Run a custom action called "read_ssh_info" which does what it
-        # says and puts the resulting SSH info into the `:machine_ssh_info`
-        # key in the environment.
+        # Exécutez une action personnalisée appelée "read_ssh_info" qui 
+        # fait ce qu'elle dit et place les informations SSH résultantes
+        # dans la clé `:machine_ssh_info` de l'environnement.
         env = @machine.action('read_ssh_info')
         env[:machine_ssh_info]
       end
@@ -43,8 +43,8 @@ module VagrantPlugins
       end
 
       def state
-        # Run a custom action we define called "read_state" which does what it
-        # says. It puts the state in the `:machine_state_id` key in the env
+        # Exécutez une action personnalisée que nous définissons appelée "read_state" qui fait ce 
+        # qu'elle dit. Il place l'état dans la clé `: machine_state_id` dans l'environnement
         env = @machine.action('read_state')
         state_id = env[:machine_state_id]
 
