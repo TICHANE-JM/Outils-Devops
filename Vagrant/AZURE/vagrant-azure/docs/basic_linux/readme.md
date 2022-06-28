@@ -1,12 +1,12 @@
-# Basic Linux Machine
-This scenario will build an Ubuntu 16.04 machine.
+# Machine Linux de base
+Ce scénario construira une machine Ubuntu 16.04.
 
-Before you attempt this scenario, ensure you have followed the [getting started docs](../../readme.md#getting-started).
+Avant de tenter ce scénario, assurez-vous d'avoir suivi les [documents de démarrage](../../readme.md#getting-started).
 
 ## Vagrant up
-- In this directory, run the following
+- Dans ce répertoire, exécutez ce qui suit
   ```bash
   vagrant up --provider=azure
   ```
   
-To clean up, run `vagrant destroy`
+Pour nettoyer, exécutez `vagrant destroy`
