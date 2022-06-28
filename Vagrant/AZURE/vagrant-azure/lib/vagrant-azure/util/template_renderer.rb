@@ -1,6 +1,6 @@
 # encoding: utf-8
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See License in the project root for license information.
+# Copyright (c) Microsoft Corporation. Tous les droits sont réservés.
+# Sous licence sous la licence MIT. Voir Licence dans la racine du projet pour les informations de licence.
 
 require "erb"
 
@@ -9,17 +9,17 @@ module VagrantPlugins
     module Util
       class TemplateRenderer
         class << self
-          # Render a given template and return the result. This method optionally
-          # takes a block which will be passed the renderer prior to rendering, which
-          # allows the caller to set any view variables within the renderer itself.
+          # Rendre un modèle donné et renvoyer le résultat. Cette méthode prend éventuellement un bloc qui sera
+          # transmis au moteur de rendu avant le rendu, ce qui permet à l'appelant de définir toutes
+          # les variables de vue dans le moteur de rendu lui-même.
           #
           # @return [String] Rendered template
           def render(*args)
             render_with(:render, *args)
           end
 
-          # Method used internally to DRY out the other renderers. This method
-          # creates and sets up the renderer before calling a specified method on it.
+          # Méthode utilisée en interne pour assécher les autres moteurs de rendu. Cette méthode crée
+          # et configure le moteur de rendu avant d'appeler une méthode spécifiée sur celui-ci.
           def render_with(method, template, data = {})
             renderer = new(template, data)
             yield renderer if block_given?
@@ -37,8 +37,8 @@ module VagrantPlugins
           ERB.new(str).result(OpenStruct.new(@data).instance_eval { binding })
         end
 
-        # Returns the full path to the template, taking into accoun the gem directory
-        # and adding the `.erb` extension to the end.
+        # Renvoie le chemin d'accès complet au modèle, en tenant compte du
+        # répertoire gem et en ajoutant l'extension `.erb` à la fin.
         #
         # @return [String]
         def full_template_path
