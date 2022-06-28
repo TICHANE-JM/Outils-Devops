@@ -1,30 +1,28 @@
-# Vagrant Azure Scenario Docs
-Here you can find some common scenarios for using Azure plugin for Vagrant.
+# Documents de scénario Vagrant Azure
+Vous trouverez ici quelques scénarios courants d'utilisation du plug-in Azure pour Vagrant.
 
-## Prerequisites
-Before you attempt any scenario, ensure you have followed the [getting started docs](../readme.md#getting-started).
+## Conditions préalables
+Avant de tenter un scénario, assurez-vous d'avoir suivi les [docs de démarrage] (../readme.md#getting-started).
 
-## Scenarios
+## Scénarios
 
 ### [Basic Linux Setup](./basic_linux)
-Setup a simple Ubuntu 16.04 machine
+Configurer une simple machine Ubuntu 16.04
 
 ### [Basic Windows Setup](./basic_windows)
-Setup a Windows SQL Server 2016 machine
+Configurer une machine Windows SQL Server 2016
 
 ### [Ubuntu Xenial Machine from VHD](./custom_vhd)
-Setup an Ubuntu box from a custom VHD
+Configurer une boîte Ubuntu à partir d'un VHD personnalisé
 
 ### [Managed Image Reference](./managed_image)
-Setup a VM from a managed image reference captured from a previously created Azure VM.
+Configurez une machine virtuelle à partir d'une référence d'image gérée capturée à partir d'une machine virtuelle Azure créée précédemment.
 
 ### [Data Disks (empty disk)](./data_disks)
-Setup an Ubuntu box with an empty attached disk
+Configurer une boîte Ubuntu avec un disque attaché vide
 
-## Azure Boxes
+## Boîtes Azure
 
-The vagrant-azure plugin provides the ability to use ```Azure``` boxes with Vagrant. Please see the example box 
-provided in [example_box](https://github.com/azure/vagrant-azure/tree/v2.0/example_box) directory and follow the 
-instructions there to build an `azure` box.
+Le plugin vagrant-azure offre la possibilité d'utiliser des boîtes ```Azure``` avec Vagrant. Veuillez consulter l'exemple de boîte fourni dans le répertoire [example_box(https://github.com/azure/vagrant-azure/tree/v2.0/example_box) et suivez les instructions qui s'y trouvent pour créer une boîte `azure` .
 
-For general Vagrant documentation see [Vagrant Docs](http://docs.vagrantup.com/v2/).
+Pour la documentation générale de Vagrant, voir [Vagrant Docs](http://docs.vagrantup.com/v2/).
