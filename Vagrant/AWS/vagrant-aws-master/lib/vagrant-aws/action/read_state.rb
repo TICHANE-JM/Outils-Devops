@@ -3,8 +3,8 @@ require "log4r"
 module VagrantPlugins
   module AWS
     module Action
-      # This action reads the state of the machine and puts it in the
-      # `:machine_state_id` key in the environment.
+      # Cette action lit l'état de la machine et le place dans la clé
+      # `:machine_state_id` de l'environnement.
       class ReadState
         def initialize(app, env)
           @app    = app
@@ -20,16 +20,16 @@ module VagrantPlugins
         def read_state(aws, machine)
           return :not_created if machine.id.nil?
 
-          # Find the machine
+          # Trouver l'appareil
           server = aws.servers.get(machine.id)
           if server.nil? || [:"shutting-down", :terminated].include?(server.state.to_sym)
-            # The machine can't be found
+            # La machine est introuvable
             @logger.info("Machine not found or terminated, assuming it got destroyed.")
             machine.id = nil
             return :not_created
           end
 
-          # Return the state
+          # Renvoie l'état
           return server.state.to_sym
         end
       end
