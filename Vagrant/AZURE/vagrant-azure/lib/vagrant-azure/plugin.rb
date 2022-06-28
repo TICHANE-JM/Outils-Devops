@@ -1,16 +1,16 @@
 # encoding: utf-8
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See License in the project root for license information.
+# Copyright (c) Microsoft Corporation. Tous les droits sont réservés.
+# Sous licence sous la licence MIT. Voir Licence dans la racine du projet pour les informations de licence.
 begin
   require 'vagrant'
 rescue LoadError
-  raise 'The Vagrant Azure plugin must be run within Vagrant.'
+  raise 'Le plugin Vagrant Azure doit être exécuté dans Vagrant.'
 end
 
-# This is a sanity check to make sure no one is attempting to install this into
-# an early Vagrant version.
+# Il s'agit d'une vérification d'intégrité pour s'assurer que personne ne tente de l'installer
+# dans une version antérieure de Vagrant.
 if Vagrant::VERSION < '1.6.0'
-  raise 'The Vagrant Azure plugin is only compatible with Vagrant 1.6+'
+  raise 'Le plugin Vagrant Azure n'est compatible qu'avec Vagrant 1.6+'
 end
 
 module VagrantPlugins
@@ -18,8 +18,8 @@ module VagrantPlugins
     class Plugin < Vagrant.plugin('2')
       name 'Azure'
       description <<-DESC
-      This plugin installs a provider that allows Vagrant to manage
-      machines in Microsoft Azure.
+      Ce plugin installe un fournisseur qui permet à Vagrant de gérer
+      des machines dans Microsoft Azure.
       DESC
 
       config(:azure, :provider) do
@@ -28,11 +28,11 @@ module VagrantPlugins
       end
 
       provider(:azure, parallel: true) do
-        # Setup logging and i18n
+        # Journalisation de la configuration et i18n
         setup_logging
         setup_i18n
 
-        # Return the provider
+        # Retourner le fournisseur
         require_relative 'provider'
         Provider
       end
@@ -65,19 +65,19 @@ module VagrantPlugins
         begin
           level = Log4r.const_get(ENV['VAGRANT_LOG'].upcase)
         rescue NameError
-          # This means that the logging constant wasn't found,
-          # which is fine. We just keep `level` as `nil`. But
-          # we tell the user.
+          # Cela signifie que la constante de journalisation n'a pas été trouvée,
+          # ce qui est bien. Nous gardons simplement `level` comme
+          # `nil`. Mais nous disons à l'utilisateur.
           level = nil
         end
 
-        # Some constants, such as "true" resolve to booleans, so the
-        # above error checking doesn't catch it. This will check to make
-        # sure that the log level is an integer, as Log4r requires.
+        # Certaines constantes, telles que "true" se résolvent en booléens, de sorte que la vérification
+        # d'erreur ci-dessus ne l'attrape pas. Cela vérifiera que le niveau de
+        # journalisation est un entier, comme l'exige Log4r.
         level = nil if !level.is_a?(Integer)
 
-        # Set the logging level on all "vagrant" namespaced logs as long as
-        # we have a valid level
+        # Définissez le niveau de journalisation sur tous les journaux d'espace de noms
+        # "vagrant" tant que nous avons un niveau valide
         if level
           logger = Log4r::Logger.new('vagrant_azure')
           logger.outputters = Log4r::Outputter.stderr
