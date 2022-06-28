@@ -1,0 +1,34 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Spécifiez la version de Vagrant et la version de l'API Vagrant
+Vagrant.require_version ">= 1.6.0"
+VAGRANTFILE_API_VERSION = "2"
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'docker'
+
+# Créer et configurer le(s) conteneur(s) Docker
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # Désactiver les dossiers synchronisés pour le conteneur Docker
+  # (empêche une erreur NFS sur "vagrant up")
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  # Configurer le fournisseur Docker pour Vagrant
+  config.vm.provider "docker" do |docker|
+
+    # Commentez cette ligne pour utiliser
+    # la machine virtuelle hôte par défaut 
+    # basée sur boot2docker
+    docker.vagrant_vagrantfile = "host/Vagrantfile"
+
+    # Spécifiez l'image Docker à utiliser
+    docker.image = "nginx"
+
+    # Spécifier les mappages de ports
+    # Si omis, aucun port n'est mappé !
+    docker.ports = ['80:80', '443:443']
+
+    # Spécifiez un nom convivial pour le conteneur Docker
+    docker.name = 'nginx-container'
+  end # config.vm.provider
+end # Vagrant.configure
