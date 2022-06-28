@@ -1,0 +1,53 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Exiger le plug-in du fournisseur AWS et le module YAML
+require 'vagrant-aws'
+require 'yaml'
+
+# Lire le fichier YAML avec les informations d'instance
+instances = YAML.load_file(File.join(File.dirname(__FILE__), 'instances.yml'))
+
+# Spécifiez la version de Vagrant et la version de l'API Vagrant
+Vagrant.require_version '>= 1.6.0'
+VAGRANTFILE_API_VERSION = '2'
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'aws'
+
+# Créer et configurer la ou les instances AWS
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # Utiliser une boîte AWS factice
+  config.vm.box = 'aws-dummy'
+
+  # Configurer les paramètres du fournisseur AWS par défaut
+  config.vm.provider 'aws' do |aws|
+
+    # Spécifier les informations d'accès/d'authentification
+    aws.access_key_id = ENV['AWS_ACCESS_KEY_ID']
+    aws.secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
+
+    # Spécifier la paire de clés AWS par défaut
+    aws.keypair_name = 'aws_rsa'
+
+    # Spécifiez la région par défaut et l'ID AMI par défaut
+    aws.region = 'us-west-2'
+  end # config.vm.provider 'aws'
+
+  # Parcourez le fichier YAML et définissez les informations par instance
+  instances.each do |instance|
+    config.vm.define instance['name'] do |srv|
+
+      # Désactiver le dossier partagé par défaut
+      srv.vm.synced_folder '.', '/vagrant', disabled: true
+
+      # Définir la configuration/les remplacements du fournisseur par instance
+      srv.vm.provider 'aws' do |aws, override|
+        override.ssh.private_key_path = '~/.ssh/aws_rsa'
+        override.ssh.username = instance['user']
+        aws.instance_type = instance['type']
+        aws.ami = instance['ami']
+        aws.security_groups = ['default']
+      end # srv.vm.provider 'aws'
+    end # config.vm.define
+  end # instances.each
+end # Vagrant.configure
