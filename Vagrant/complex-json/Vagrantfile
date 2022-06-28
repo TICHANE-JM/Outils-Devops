@@ -20,7 +20,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Parcourir les entrées du fichier JSON pour créer une machine virtuelle
   machines.each do |machine|
 
-    # Configurez les VM selon les détails dans machines.yml
+    # Configurez les VM selon les détails dans machines.json
     config.vm.define machine['name'] do |srv|
 
       # Ne pas vérifier les mises à jour de la boîte
@@ -39,7 +39,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         srv.vm.synced_folder '.', '/vagrant', disabled: true
       end #if machine['sync_disabled']
 
-      # Itérer à travers les réseaux selon les paramètres dans machines.yml
+      # Itérer à travers les réseaux selon les paramètres dans machines.json
       machine['nics'].each do |net|
         if net['ip_addr'] == 'dhcp'
           srv.vm.network net['type'], type: net['ip_addr']
@@ -48,7 +48,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end # if net['ip_addr']
       end # machine['nics'].each
 
-      # Configurez le CPU et la RAM selon les paramètres dans machines.yml (Fusion)
+      # Configurez le CPU et la RAM selon les paramètres dans machines.json (Fusion)
       srv.vm.provider 'vmware_fusion' do |vmw|
         vmw.vmx['memsize'] = machine['ram']
         vmw.vmx['numvcpus'] = machine['vcpu']
@@ -57,7 +57,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end #if machine['nested']
       end # srv.vm.provider 'vmware_fusion'
 
-      # Configurez le CPU et la RAM selon les paramètres dans machines.yml (VirtualBox)
+      # Configurez le CPU et la RAM selon les paramètres dans machines.json (VirtualBox)
       srv.vm.provider 'virtualbox' do |vb, override|
         vb.memory = machine['ram']
         vb.cpus = machine['vcpu']
