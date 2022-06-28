@@ -1,6 +1,6 @@
 # encoding: utf-8
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See License in the project root for license information.
+# Copyright (c) Microsoft Corporation. Tous les droits sont réservés.
+# Sous licence sous la licence MIT. Voir Licence dans la racine du projet pour les informations de licence.
 require 'pathname'
 
 require 'vagrant/action/builder'
@@ -9,10 +9,10 @@ require 'vagrant/action/builtin/wait_for_communicator'
 module VagrantPlugins
   module Azure
     module Action
-      # Include the built-in modules so we can use them as top-level things.
+      # Incluez les modules intégrés afin que nous puissions les utiliser comme éléments de niveau supérieur.
       include Vagrant::Action::Builtin
 
-      # This action is called to halt the remote machine.
+      # Cette action est appelée pour arrêter la machine distante.
       def self.action_halt
         Vagrant::Action::Builder.new.tap do |b|
           b.use ConfigValidate
@@ -28,7 +28,7 @@ module VagrantPlugins
         end
       end
 
-      # This action is called to terminate the remote machine.
+      # Cette action est appelée pour arrêter la machine distante.
       def self.action_destroy
         Vagrant::Action::Builder.new.tap do |b|
           b.use Call, DestroyConfirm do |env, b2|
@@ -50,7 +50,7 @@ module VagrantPlugins
         end
       end
 
-      # This action is called when `vagrant provision` is called.
+      # Cette action est appelée lorsque `vagrant provision` est appelé.
       def self.action_provision
         Vagrant::Action::Builder.new.tap do |b|
           b.use ConfigValidate
@@ -65,8 +65,8 @@ module VagrantPlugins
         end
       end
 
-      # This action is called to read the SSH info of the machine. The
-      # resulting state is expected to be put into the `:machine_ssh_info` key.
+      # Cette action est appelée pour lire les informations SSH de la machine.
+      # L'état résultant devrait être placé dans la clé `:machine_ssh_info`.
       def self.action_read_ssh_info
         Vagrant::Action::Builder.new.tap do |b|
           b.use ConfigValidate
@@ -75,8 +75,8 @@ module VagrantPlugins
         end
       end
 
-      # This action is called to read the WinRM info of the machine. The
-      # resulting state is expected to be put into the `:machine_winrm_info` key.
+      # Cette action est appelée pour lire les informations WinRM de la machine. 
+      # L'état résultant devrait être placé dans la clé `:machine_winrm_info`.
       def self.action_read_winrm_info
         Vagrant::Action::Builder.new.tap do |b|
           b.use ConfigValidate
@@ -85,9 +85,8 @@ module VagrantPlugins
         end
       end
 
-      # This action is called to read the state of the machine. The
-      # resulting state is expected to be put into the `:machine_state_id`
-      # key.
+      # Cette action est appelée pour lire l'état de la machine. 
+      # L'état résultant devrait être placé dans la clé `:machine_state_id`.
       def self.action_read_state
         Vagrant::Action::Builder.new.tap do |b|
           b.use ConfigValidate
@@ -96,7 +95,7 @@ module VagrantPlugins
         end
       end
 
-      # This action is called to SSH into the machine.
+      # Cette action est appelée en SSH dans la machine.
       def self.action_ssh
         Vagrant::Action::Builder.new.tap do |b|
           b.use ConfigValidate
@@ -132,7 +131,7 @@ module VagrantPlugins
         end
       end
 
-      # This action is called to bring the box up from nothing.
+      # Cette action est appelée à faire remonter la boîte à partir de rien.
       def self.action_up
         Vagrant::Action::Builder.new.tap do |b|
           b.use HandleBox
@@ -179,7 +178,7 @@ module VagrantPlugins
         end
       end
 
-      # The autoload farm
+      # La ferme de chargement automatique
       action_root = Pathname.new(File.expand_path('../action', __FILE__))
       autoload :ConnectAzure, action_root.join('connect_azure')
       autoload :IsCreated, action_root.join('is_created')
