@@ -1,6 +1,6 @@
-# encoding: utf-8
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See License in the project root for license information.
+# encodage : utf-8
+# Copyright (c) Microsoft Corporation. Tous les droits sont réservés.
+# Licence sous la licence MIT. Voir Licence dans la racine du projet pour les informations de licence.
 require 'log4r'
 require 'vagrant-azure/util/machine_id_helper'
 require 'vagrant-azure/util/vm_status_translator'
@@ -30,7 +30,7 @@ module VagrantPlugins
           env[:ui].info(I18n.t('vagrant_azure.starting', parsed))
           azure.compute.virtual_machines.start(parsed[:group], parsed[:name])
 
-          # Wait for the instance to be ready first
+          # Attendez d'abord que l'instance soit prête
           env[:metrics]['instance_ready_time'] = Util::Timer.time do
 
             env[:ui].info(I18n.t('vagrant_azure.waiting_for_ready'))
