@@ -10,7 +10,7 @@ group :development, :test do
   # Nous dépendons de Vagrant pour le développement, mais nous ne l'ajoutons pas 
   # en tant que dépendance de gemme car nous nous attendons à être installés dans 
   # l'environnement Vagrant lui-même en utilisant `vagrant plugin`.
-  gem "vagrant", git: "https://github.com/mitchellh/vagrant.git", tag: "v1.9.2"
+  gem "vagrant", git: "https://github.com/hashicorp/vagrant.git", tag: "v1.9.2"
 end
 
 group :plugins do
