@@ -1,126 +1,126 @@
 en:
   vagrant_azure:
     launching_instance: |-
-      Launching an instance with the following settings...
+      Lancement d'une instance avec les paramètres suivants...
     not_created: |-
-      The machine does not exist. Please run `vagrant up` first.
+      La machine n'existe pas. Veuillez d'abord lancer "vagrant up".
     will_not_destroy: |-
-      The machine '%{name}' will not be destroyed as the user declined confirmation.
+      La machine '%{name}' ne sera pas détruite car l'utilisateur a refusé la confirmation.
     already_status: |-
-      The machine is already %{status}.
+      La machine est déjà %{status}.
     stopping: |-
-      Stopping '%{name}' in '%{group}'
+      Arrêt de '%{name}' dans '%{group}'
     terminating: |-
-      Terminating '%{name}'
+      Terminer '%{name}'
     terminated: |-
-      Terminated '%{name}'
+      '%{name}' terminé
     rdp_not_ready: |-
-      RDP not ready
+      RDP pas prêt
     starting: |-
-      VM '%{name}' is starting
+      La machine virtuelle '%{name}' démarre
     started: |-
-      VM '%{name}' has been started
+      La machine virtuelle '%{name}' a été démarrée
     stopping: |-
-      VM '%{name}' is stopping
+      La machine virtuelle '%{name}' s'arrête
     stopped: |-
-      VM '%{name}' has been stopped
+      La machine virtuelle '%{name}' a été arrêtée
     restarting: |-
-      VM '%{name}' is restarting
+      La machine virtuelle '%{name}' est en cours de redémarrage
     restarted: |-
-      VM '%{name}' has been restarted
+      La machine virtuelle '%{name}' a été redémarrée
     copy_folder: |-
       Copying folder: %{hostpath} ==>
       %{guestpath}
     rsync_not_found_warning: |-
-      Warning! Folder sync disabled because the rsync binary is missing in the %{side}.
-      Make sure rsync is installed and the binary can be found in the PATH.
+      Avertissement! Synchronisation des dossiers désactivée car le binaire rsync est manquant dans le %{side}.
+      Assurez-vous que rsync est installé et que le binaire se trouve dans le PATH.
     waiting_for_comm: |-
-      Waiting for Communication
+      En attente de communication
     comm_ready: |-
-      Communication is Ready
+      La communication est prête
     read_attempt: |-
-     Failed to connect to Virtual Machine. Re-Connecting %{attempt}
+     Échec de la connexion à la machine virtuelle. Reconnexion de %{tentative}
     errors:
       win_rm_not_ready: |-
-        Vagrant failed to communicate to the VM using powershell. The operation failed
-        with the following message.
+        Vagrant n'a pas réussi à communiquer avec la machine virtuelle à l'aide de PowerShell. L'opération a échoué
+        avec le message suivant.
         %{message}
       server_not_created: |-
-        Server not created. Error is: %{message}
+        Serveur non créé. L'erreur est: %{message}
       create_vm_failure: |-
-        There was some error in creating the VM.
+        Une erreur s'est produite lors de la création de la machine virtuelle.
       failed_starting: |-
-        Failed to start VM '%{name}'!!
+        Échec du démarrage de la machine virtuelle '%{name}' !!
       failed_stopping: |-
-        Failed to stopping VM '%{name}'!!
+        Échec de l'arrêt de la VM '%{name}' !!
     subscription_id:
       required: |-
-        You must provide an Azure Subscription Id either through ENV['AZURE_SUBSCRIPTION_ID'] or via Vagrantfile.
+        Vous devez fournir un identifiant d'abonnement Azure via ENV['AZURE_SUBSCRIPTION_ID'] ou via Vagrantfile.
     mgmt_endpoint:
       required: |-
-        You must provide a non-nil Azure Management Endpoint either through ENV['AZURE_MANAGEMENT_ENDPOINT'] or via Vagrantfile.
+        Vous devez fournir un point de terminaison de gestion Azure non nul via ENV['AZURE_MANAGEMENT_ENDPOINT'] ou via Vagrantfile.
     auth:
       required: |-
-        You must provide Azure Active Directory Tenant ID, Application Client ID and Application Client Secret via ENV or Vagrantfile.
+        Vous devez fournir l'ID de locataire Azure Active Directory, l'ID du client d'application et le secret du client d'application via ENV ou Vagrantfile.
     states:
       short_not_created: |-
-        not created
+        non créé
       long_not_created: |-
-        The Azure instance is not created. Run `vagrant up` to create it.
+        L'instance Azure n'est pas créée. Exécutez `vagrant up` pour le créer.
       short_stopped: |-
-        stopped
+        arrêté
       short_starting: |-
-        starting
+        départ
       short_started: |-
-        started
+        a débuté
       long_stopped: |-
-        The Azure instance is stopped. Run `vagrant up` to start it.
+        L'instance Azure est arrêtée. Exécutez `vagrant up` pour le démarrer.
       short_stopping: |-
-        stopping
+        arrêt
       long_stopping: |-
-        The Azure instance is stopping. Wait until is completely stopped to
-        run `vagrant up` and start it.
+        L'instance Azure s'arrête. Attendez qu'il soit complètement arrêté pour
+        exécuter `vagrant up` et démarrez-le.
       short_pending: |-
-        pending
+        en attendant
       long_pending: |-
-        The Azure instance is pending a start (i.e. this is a transition state).
+        L'instance Azure est en attente de démarrage (c'est-à-dire qu'il s'agit d'un état de transition).
       short_running: |-
-        running
+       fonctionnement
       long_running: |-
-        The Azure instance is running. To stop this machine, you can run
-        `vagrant halt`. To destroy the machine, you can run `vagrant destroy`.
+        L'instance Azure est en cours d'exécution. Pour arrêter cette machine, vous pouvez exécuter
+        `vagrant halt`. Pour détruire la machine, vous pouvez exécuter  `vagrant destroy`.
       short_pending: |-
-        pending
+        en attendant
       long_pending: |-
-        The Azure instance is still being initialized. To destroy this machine,
-        you can run `vagrant destroy`.
+        L'instance Azure est toujours en cours d'initialisation. Pour détruire cette machine,
+        vous pouvez exécuter `vagrant destroy`
     waiting_for_ssh: |-
-      Waiting for SSH to become available...
+      En attendant que SSH soit disponible...
     waiting_for_winrm: |-
-      Waiting for WinRM to become available...
+      En attendant que WinRM soit disponible...
     ready: |-
-      Machine is booted and ready for use!
+      La machine est démarrée et prête à l'emploi !
     public_key_path_private_key: |-
-      We expect the public key to be added to the Azure VM to be located at the
-      same place as the config.ssh.private_key_path + '.pub'. We couldn't find
-      any public keys for these private key paths:
+      Nous nous attendons à ce que la clé publique à ajouter à la machine virtuelle Azure soit située au même
+      endroit que le config.ssh.private_key_path + '.pub'. Nous n'avons trouvé
+      aucune clé publique pour ces chemins de clé privée :
     private_key_not_specified: |-
-      Please specify a secure key to use with config.ssh.private_key_path
-      (see: https://www.vagrantup.com/docs/vagrantfile/ssh_settings.html).
-      If not, you publicly accessible Azure VM will be extremely insecure.
+      Veuillez spécifier une clé sécurisée à utiliser avec config.ssh.private_key_path
+      (voir : https://www.vagrantup.com/docs/vagrantfile/ssh_settings.html).
+      Sinon, votre machine virtuelle Azure accessible publiquement sera extrêmement peu sécurisée.
     too_many_tcp_endpoints: |-
-      There are '%{count}' TCP Endpoints (Inbound Security Rules) specified for the NetworkSecurityGroup, which is too many. 
-      There can be a max of 3963 (4096 - 133, where 133 is where we start as priority for custom rule #1, and so forth)
-      (see: https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-nsg#Nsg-rules)
+      Il y a '%{count}' points de terminaison TCP (règles de sécurité entrantes) spécifiés pour le NetworkSecurityGroup, ce qui est trop. 
+      Il peut y avoir un maximum de 3963 (4096 - 133, où 133 est l'endroit où nous commençons comme priorité pour la règle personnalisée n°1, et ainsi de suite)
+     (voir : https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-nsg#Nsg-rules)
     unknown_type_as_tcp_endpoints: |-
-      Unrecognized setting '%{input}' as TCP Endpoints (Inbounds Security Rules), expected an array, string or positive number.
+     Paramètre '%{input}' non reconnu en tant que points de terminaison TCP (règles de sécurité entrantes), attendu un tableau, une chaîne ou un nombre positif.
     waiting_for_ready: |-
-      Waiting for instance to become "ready"...
+      En attendant par exemple d'être "prêt"...
     waiting_for_stop: |-
-      Waiting for instance to become "stopped"...
+      En attendant par exemple d'être "stoppé"...
     custom_image_os_error:
-      If you provide a custom image, you must provide the operating system for the image (vm_operating_system).
+      Si vous fournissez une image personnalisée, vous devez fournir le système d'exploitation pour l'image (vm_operating_system).
     vhd_and_managed_image_error:
-      Specifying both vm_vhd_uri and vm_managed_image_id is not supported. Please specify one or the other.
+      La spécification à la fois de vm_vhd_uri et de vm_managed_image_id n'est pas prise en charge. Veuillez préciser l'un ou l'autre.
     manage_image_id_format_error:
-      The vm_managed_image_id doesn't fit the expected format, plese verify it looks like '/subscriptions/{sub_id}/resourceGroups/{group_name}/providers/Microsoft.Compute/images/{image_name}'
+      Le vm_managed_image_id ne correspond pas au format attendu, veuillez vérifier qu'il ressemble à '/subscriptions/{sub_id}/resourceGroups/{group_name}/providers/Microsoft.Compute/images/{image_name}'
