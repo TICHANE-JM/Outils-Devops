@@ -1,10 +1,10 @@
-# OS-specific
+# Spécifique au système d'exploitation
 .DS_Store
 
-# editors
+# éditeurs
 *.swp
 
-# Bundler/Rubygems
+# Regroupeur/Rubygems
 *.gem
 .bundle
 pkg/*
@@ -16,6 +16,6 @@ Gemfile.lock
 Vagrantfile
 !example_box/Vagrantfile
 
-# RVM files for gemset/ruby setting
+# Fichiers RVM pour le réglage gemset/ruby
 .ruby-*
 .rvmrc
