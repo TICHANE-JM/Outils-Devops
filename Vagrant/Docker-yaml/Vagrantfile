@@ -1,0 +1,49 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Spécifiez la version de Vagrant, la version de l'API Vagrant et l'emplacement du clone Vagrant
+Vagrant.require_version '>= 1.6.0'
+VAGRANTFILE_API_VERSION = '2'
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'docker'
+
+# Nécessite le module 'yaml'
+require 'yaml'
+
+# Lire les détails des conteneurs à créer à partir du fichier YAML
+# Assurez-vous de modifier 'containers.yml' pour fournir des détails sur le conteneurs
+containers = YAML.load_file(File.join(File.dirname(__FILE__), 'containers.yml'))
+
+# Créer et configurer le(s) conteneur(s) Docker
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # Effectuez une configuration unique du fournisseur Docker pour spécifier
+  # l'emplacement de Vagrantfile pour la machine virtuelle hôte ; commentez cette section
+  # pour utiliser la boîte boot2docker par défaut
+  config.vm.provider 'docker' do |docker|
+    docker.vagrant_vagrantfile = 'VagrantfileHost'
+  end # config.vm.provider
+
+  # Parcourir les entrées du fichier YAML
+  containers.each do |container|
+    config.vm.define container['name'] do |cntnr|
+
+      # Désactiver les dossiers synchronisés pour le conteneur Docker
+      # (empêche une erreur NFS sur "vagrant up")
+      cntnr.vm.synced_folder '.', '/vagrant', disabled: true
+
+      # Configurer le fournisseur Docker pour Vagrant
+      cntnr.vm.provider 'docker' do |docker|
+
+        # Spécifiez l'image Docker à utiliser, extrayez la valeur du fichier YAML
+        docker.image = container['image']
+
+        # Spécifiez les mappages de port, extrayez la valeur du fichier YAML
+        # Si omis, aucun port n'est mappé !
+        docker.ports = container['ports']
+
+        # Spécifiez un nom convivial pour le conteneur Docker, extrait du fichier YAML
+        docker.name = container['name']
+      end # contnr.vm.provider
+    end # config.vm.define
+  end # containers.each
+end # Vagrant.configure
