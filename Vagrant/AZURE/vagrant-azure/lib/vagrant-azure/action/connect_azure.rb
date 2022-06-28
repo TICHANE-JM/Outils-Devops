@@ -1,6 +1,6 @@
 # encoding: utf-8
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See License in the project root for license information.
+# Copyright (c) Microsoft Corporation. Tous les droits sont réservés.
+# Sous licence sous la licence MIT. Voir Licence dans la racine du projet pour les informations de licence.
 require_relative '../services/azure_resource_manager'
 require 'log4r'
 
