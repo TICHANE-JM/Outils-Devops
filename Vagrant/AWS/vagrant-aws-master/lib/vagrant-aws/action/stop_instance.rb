@@ -3,7 +3,7 @@ require "log4r"
 module VagrantPlugins
   module AWS
     module Action
-      # This stops the running instance.
+      # Cela arrête l'instance en cours d'exécution.
       class StopInstance
         def initialize(app, env)
           @app    = app
