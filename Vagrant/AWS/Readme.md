@@ -1,6 +1,6 @@
 # VAGRANT avec AWS (instance unique)
 
-Les fichiers contenu dans ce répertoire permettent aux utilisateurs d'utiliser [Vagrant](http://www.vagrantup.com) avec AWS. Les machines virtuelles gérées par Vagrant sont des instances exécutées sur AWS. En utilisant ces fichiers, Vagrant n'effectuera qu'une seule instance à la fois.  Cette configuration a été testée avec Vagrant 2.2.19, le [plugin Vagrant-AWS](https://github.com/mitchellh/vagrant-aws) et AWS.
+Les fichiers contenu dans ce répertoire permettent aux utilisateurs d'utiliser [Vagrant](http://www.vagrantup.com) avec AWS. Les machines virtuelles gérées par Vagrant sont des instances exécutées sur AWS. En utilisant ces fichiers, Vagrant n'effectuera qu'une seule instance à la fois.  Cette configuration a été testée avec Vagrant 2.2.19, le [plugin Vagrant-AWS](https://github.com/TICHANE-JM/Outils-Devops/tree/main/Vagrant/AWS/vagrant-aws-master) et AWS.
 
 ## Contenu
 
