@@ -7,5 +7,5 @@ spec:
   template:
     spec:
       sshKeyName: usw2_rsa_key
-      # Uncomment following line to change instance type
+      # Décommentez la ligne suivante pour modifier le type d'instance
       instanceType: m5.xlarge
