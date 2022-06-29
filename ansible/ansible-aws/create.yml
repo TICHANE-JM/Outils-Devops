@@ -3,17 +3,17 @@
   connection: "local"
   gather_facts: false
   vars:
-    ami: "<insert AMI ID here>"
-    region: "<insert AWS region here>"
+    ami: "<insérez l'ID AMI ici>"
+    region: "<insérer la région AWS ici>"
     type: "t2.micro"
-    sshkey: "<insert SSH keypair name here>"
-    vpcid: "<insert VPC ID here>"
+    sshkey: "<insérez le nom de la paire de clés SSH ici>"
+    vpcid: "<insérez l'ID VPC ici>"
 
   tasks:
-  - name: "Create a new security group"
+  - name: "Créer un nouveau groupe de sécurité"
     ec2_group:
       name: "ansible-sec-group"
-      description: "New SG for Ansible-created instances"
+      description: "Nouveau SG pour les instances créées par Ansible"
       region: "{{ region }}"
       vpc_id: "{{ vpcid }}"
       rules:
@@ -26,7 +26,7 @@
           cidr_ip: "0.0.0.0/0"
     register: secgrp
 
-  - name: "Provision an EC2 instance"
+  - name: "Provisionner une instance EC2"
     ec2:
       key_name: "{{ sshkey }}"
       group_id: "{{ secgrp.group_id }}"
