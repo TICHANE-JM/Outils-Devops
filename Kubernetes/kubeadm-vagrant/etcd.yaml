@@ -1,0 +1,83 @@
+# Ce manifeste installe Calico etcd sur le maître kubeadm. Cela utilise un DaemonSet
+# pour le forcer à s'exécuter sur le maître même lorsque le maître n'est pas planifiable, et utilise 
+# nodeSelector pour s'assurer qu'il ne s'exécute que sur le maître.
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: calico-etcd
+  namespace: kube-system
+  labels:
+    k8s-app: calico-etcd
+spec:
+  template:
+    metadata:
+      labels:
+        k8s-app: calico-etcd
+      annotations:
+        # Marquez ce module comme un module complémentaire critique ; Lorsqu'il est activé, le planificateur 
+        # de modules complémentaires critiques réserve des ressources pour les pods de modules complémentaires critiques afin qu'ils puissent être replanifiés après
+        # une panne. Cette annotation fonctionne en tandem avec la tolérance ci-dessous.
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+    spec:
+      tolerations:
+        # Cette teinte est définie par tous les kubelets exécutant `--cloud-provider=external`,
+        # nous devrions donc la tolérer pour planifier les pods Calico
+        - key: node.cloudprovider.kubernetes.io/uninitialized
+          value: "true"
+          effect: NoSchedule
+        # Autorisez ce pod à s'exécuter sur le maître.
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+        # Autoriser la reprogrammation de ce pod pendant que le nœud est en mode « modules complémentaires critiques uniquement ».
+        # Ceci, ainsi que l'annotation ci-dessus, marquent ce pod comme un complément essentiel.
+        - key: CriticalAddonsOnly
+          operator: Exists
+      # N'exécutez ce pod que sur le maître.
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+      hostNetwork: true
+      containers:
+        - name: calico-etcd
+          image: quay.io/coreos/etcd:v3.3.9
+          env:
+            - name: CALICO_ETCD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          command:
+          - /usr/local/bin/etcd
+          args:
+          - --name=calico
+          - --data-dir=/var/etcd/calico-data
+          - --advertise-client-urls=http://$(CALICO_ETCD_IP):6666
+          - --listen-client-urls=http://0.0.0.0:6666
+          - --listen-peer-urls=http://0.0.0.0:6667
+          - --auto-compaction-retention=1
+          volumeMounts:
+            - name: var-etcd
+              mountPath: /var/etcd
+      volumes:
+        - name: var-etcd
+          hostPath:
+            path: /var/etcd
+
+---
+
+# Ce manifeste installe le service qui achemine le trafic vers Calico
+# etcd.
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: calico-etcd
+  name: calico-etcd
+  namespace: kube-system
+spec:
+  # Sélectionnez le pod calico-etcd exécuté sur le maître.
+  selector:
+    k8s-app: calico-etcd
+  # Cette ClusterIP doit être connue à l'avance, car nous ne pouvons pas nous fier
+  # sur DNS pour accéder à etcd.
+  clusterIP: 10.96.232.136
+  ports:
+    - port: 6666
