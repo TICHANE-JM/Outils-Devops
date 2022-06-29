@@ -1,0 +1,77 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Spécifiez la version minimale de Vagrant et la version de l'API Vagrant
+Vagrant.require_version '>= 1.6.0'
+VAGRANTFILE_API_VERSION = '2'
+
+# Nécessite les modules 'yaml' et 'erb'
+require 'yaml'
+require 'erb'
+
+# Lire le fichier YAML avec les détails de la VM (boîte, CPU, RAM, adresses IP)
+# Assurez-vous de modifier machines.yml pour fournir des adresses IP correctes
+machines = YAML.load_file(File.join(File.dirname(__FILE__), 'machines.yml'))
+
+# Utilisez la configuration du fichier YAML pour écrire des modèles pour les remplacements etcd
+template = File.join(File.dirname(__FILE__), 'etcd.defaults.erb')
+content = ERB.new File.new(template).read
+
+etcd_initial_cluster = []
+machines.each do |machine|
+  etcd_initial_cluster << "#{machine['name']}=http://#{machine['priv_ip']}:2380"
+end
+machines.each do |machine|
+  ip = machine['priv_ip']
+  target = File.join(File.dirname(__FILE__), "#{machine['name']}.defaults")
+  File.open(target, 'w') { |f| f.write(content.result(binding)) }
+end
+
+# Créer et configurer les VM
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # Utilisez toujours la clé non sécurisée par défaut de Vagrant
+  config.ssh.insert_key = false
+
+  # Parcourir les entrées du fichier YAML pour créer des machines virtuelles
+  machines.each do |machine|
+    config.vm.define machine['name'] do |srv|
+
+      # Ne pas vérifier les mises à jour de la boîte
+      srv.vm.box_check_update = false
+
+      # Définir le nom d'hôte de la VM
+      srv.vm.hostname = machine['name']
+
+      # Spécifiez la boîte à utiliser (utilisez la boîte VMware par défaut)
+      srv.vm.box = machine['box']['vmw']
+
+      # Attribuer un réseau privé statique supplémentaire
+      srv.vm.network 'private_network', ip: machine['priv_ip']
+
+      # Spécifiez le dossier synchronisé par défaut ; nécessite VMware Tools
+      # Notez que les dossiers partagés sont OBLIGATOIRES pour que le provisionnement du shell fonctionne
+      srv.vm.synced_folder '.', '/vagrant', disabled: true
+
+      # Provisionner etcd sur les machines virtuelles
+      srv.vm.provision 'file', source: 'etcd.conf',
+        destination: '/home/vagrant/etcd.conf'
+      srv.vm.provision 'file', source: "#{machine['name']}.defaults",
+        destination: '/home/vagrant/etcd.defaults'
+      srv.vm.provision 'shell', path: 'provision.sh', privileged: true
+
+      # Configurez les machines virtuelles avec de la RAM et des processeurs selon les paramètres dans machines.yml (Fusion)
+      srv.vm.provider 'vmware_fusion' do |vmw|
+        vmw.vmx['memsize'] = machine['ram']
+        vmw.vmx['numvcpus'] = machine['vcpu']
+      end # srv.vm.provider 'vmware_fusion'
+
+      # Configurez les machines virtuelles avec de la RAM et des processeurs selon les paramètres dans machines.yml (VirtualBox)
+      srv.vm.provider 'virtualbox' do |vb, override|
+        vb.memory = machine['ram']
+        vb.cpus = machine['vcpu']
+        override.vm.box = machine['box']['vb']
+      end # srv.vm.provider 'virtualbox'
+    end # config.vm.define
+  end # machines.each
+end # Vagrant.configure
