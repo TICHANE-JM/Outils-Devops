@@ -16,7 +16,7 @@ Ces fichiers fournissent un exemple de téléchargement, d'extraction et "d'inst
 
 Ces instructions supposent que Vagrant et Ansible sont installés et fonctionnent correctement sur votre système, et que le fournisseur de virtualisation utilisé par Vagrant fonctionne comme prévu. Ces instructions supposent également que vous avez installé tous les plug-ins Vagrant nécessaires pour prendre en charge le fournisseur de virtualisation installé.
 
-1. Placez les fichiers du répertoire `ansible/extract-gh-archive` de ce référentiel GitHub dans un répertoire sur votre système local. Vous pouvez cloner l'intégralité de ce référentiel "Outils-Devops" (En utilisant `git clone`) ou téléchargez simplement les fichiers spécifiques à partir du dossier `ansible/extract-gh-archive`.
+1. Placez les fichiers du répertoire `extract-gh-archive` de ce référentiel GitHub dans un répertoire sur votre système local. Vous pouvez cloner l'intégralité de ce référentiel "Outils-Devops" (En utilisant `git clone`) ou téléchargez simplement les fichiers spécifiques à partir du dossier `ansible/extract-gh-archive`.
 
 2. Installez une boîte Vagrant pour CentOS 7. Le fichier `machines.yml` contient des boîtes suggérées pour VirtualBox, VMware et Libvirt.
 
