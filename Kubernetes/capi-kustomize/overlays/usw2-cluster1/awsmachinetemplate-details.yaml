@@ -1,0 +1,11 @@
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1alpha2
+kind: AWSMachineTemplate
+metadata:
+  name: .*
+spec:
+  template:
+    spec:
+      sshKeyName: usw2_rsa_key
+      # Décommentez la ligne suivante pour modifier le type d'instance
+      #instanceType: m5.xlarge
