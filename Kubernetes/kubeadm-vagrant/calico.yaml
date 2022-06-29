@@ -1,0 +1,401 @@
+# Calico Version v3.3.7
+# https://docs.projectcalico.org/v3.3/releases#v3.3.7
+# This manifest includes the following component versions:
+#   calico/node:v3.3.7
+#   calico/cni:v3.3.7
+#   calico/kube-controllers:v3.3.7
+
+# Ce ConfigMap est utilisé pour configurer une installation Calico auto-hébergée.
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: calico-config
+  namespace: kube-system
+data:
+  # Configurez ceci avec l'emplacement de votre cluster etcd.
+  etcd_endpoints: "http://10.96.232.136:6666"
+
+  # Si vous utilisez etcd activé par TLS, décommentez ce qui suit.
+  # Vous devez également remplir le secret ci-dessous avec ces fichiers.
+  etcd_ca: ""   # "/calico-secrets/etcd-ca"
+  etcd_cert: "" # "/calico-secrets/etcd-cert"
+  etcd_key: ""  # "/calico-secrets/etcd-key"
+  # Configurez le backend Calico à utiliser.
+  calico_backend: "bird"
+
+  # Configurer le MTU à utiliser
+  veth_mtu: "1440"
+
+  # La configuration réseau CNI à installer sur chaque nœud. Le spécial
+  # les valeurs de cette configuration seront automatiquement renseignées.
+  cni_network_config: |-
+    {
+      "name": "k8s-pod-network",
+      "cniVersion": "0.3.0",
+      "plugins": [
+        {
+          "type": "calico",
+          "log_level": "info",
+          "etcd_endpoints": "__ETCD_ENDPOINTS__",
+          "etcd_key_file": "__ETCD_KEY_FILE__",
+          "etcd_cert_file": "__ETCD_CERT_FILE__",
+          "etcd_ca_cert_file": "__ETCD_CA_CERT_FILE__",
+          "mtu": __CNI_MTU__,
+          "ipam": {
+              "type": "calico-ipam"
+          },
+          "policy": {
+              "type": "k8s"
+          },
+          "kubernetes": {
+              "kubeconfig": "__KUBECONFIG_FILEPATH__"
+          }
+        },
+        {
+          "type": "portmap",
+          "snat": true,
+          "capabilities": {"portMappings": true}
+        }
+      ]
+    }
+
+---
+
+
+# Ce qui suit contient les secrets k8s à utiliser avec un cluster etcd activé par TLS.
+# Pour plus d'informations sur le remplissage des secrets, voir http://kubernetes.io/docs/user-guide/secrets/
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: calico-etcd-secrets
+  namespace: kube-system
+data:
+  # Remplissez les fichiers suivants avec la configuration etcd TLS si vous le souhaitez, mais laissez vide si vous
+  # n'utilisez pas TLS pour etcd.
+  # Cette installation auto-hébergée attend trois fichiers portant les noms suivants.  
+  # Les valeurs doivent être des chaînes encodées en base64 de l'intégralité du contenu de chaque fichier.
+  # etcd-key: null
+  # etcd-cert: null
+  # etcd-ca: null
+
+---
+
+# Ce manifeste installe également le conteneur calico/node
+# comme les plugins Calico CNI et la configuration réseau sur
+# chaque nœud maître et nœud de travail dans un cluster Kubernetes.
+kind: DaemonSet
+apiVersion: extensions/v1beta1
+metadata:
+  name: calico-node
+  namespace: kube-system
+  labels:
+    k8s-app: calico-node
+spec:
+  selector:
+    matchLabels:
+      k8s-app: calico-node
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: calico-node
+      annotations:
+        # Ceci, ainsi que la tolérance CriticalAddonsOnly ci-dessous,
+        # marque le pod comme un module complémentaire critique, garantissant qu'il bénéficie d'une
+        # planification prioritaire et que ses ressources sont réservées
+        # si jamais il est expulsé.
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+    spec:
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+      hostNetwork: true
+      tolerations:
+        # Assurez-vous que calico-node est planifié sur tous les nœuds.
+        - effect: NoSchedule
+          operator: Exists
+        # Marquez le module comme un complément essentiel pour la reprogrammation.
+        - key: CriticalAddonsOnly
+          operator: Exists
+        - effect: NoExecute
+          operator: Exists
+      serviceAccountName: calico-node
+      # Minimiser les temps d'arrêt lors d'une mise à niveau ou d'une suppression progressive ; dites à Kubernetes de faire 
+      # une "suppression forcée": https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods.
+      terminationGracePeriodSeconds: 0
+      containers:
+        # Exécute le conteneur calico/nœud sur chaque nœud Kubernetes.  
+        # Ce conteneur programme la politique réseau et les routes sur chaque
+        # host.
+        - name: calico-node
+          image: calico/node:v3.3.7
+          env:
+            # Emplacement du cluster Calico etcd.
+            - name: ETCD_ENDPOINTS
+              valueFrom:
+                configMapKeyRef:
+                  name: calico-config
+                  key: etcd_endpoints
+            # Emplacement du certificat CA pour etcd.
+            - name: ETCD_CA_CERT_FILE
+              valueFrom:
+                configMapKeyRef:
+                  name: calico-config
+                  key: etcd_ca
+            # Emplacement de la clé client pour etcd.
+            - name: ETCD_KEY_FILE
+              valueFrom:
+                configMapKeyRef:
+                  name: calico-config
+                  key: etcd_key
+            # Emplacement du certificat client pour etcd.
+            - name: ETCD_CERT_FILE
+              valueFrom:
+                configMapKeyRef:
+                  name: calico-config
+                  key: etcd_cert
+            # Définissez noderef pour le contrôleur de nœud.
+            - name: CALICO_K8S_NODE_REF
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            # Choisissez le backend à utiliser.
+            - name: CALICO_NETWORKING_BACKEND
+              valueFrom:
+                configMapKeyRef:
+                  name: calico-config
+                  key: calico_backend
+            # Type de cluster pour identifier le type de déploiement
+            - name: CLUSTER_TYPE
+              value: "k8s,bgp"
+            # Détecte automatiquement l'adresse IP BGP.
+            - name: IP
+              value: "autodetect"
+            # Activer IPIP
+            - name: CALICO_IPV4POOL_IPIP
+              value: "Always"
+            # Définir le MTU pour le périphérique de tunnel utilisé si ipip est activé
+            - name: FELIX_IPINIPMTU
+              valueFrom:
+                configMapKeyRef:
+                  name: calico-config
+                  key: veth_mtu
+            # Le pool IPv4 par défaut à créer au démarrage s'il n'en existe pas. Les adresses IP de pod
+            # seront choisies dans cette plage. La modification de cette valeur après l'installation n'aura 
+            # aucun effet. Cela devrait tomber dans `--cluster-cidr`.
+            - name: CALICO_IPV4POOL_CIDR
+              value: "192.168.0.0/16"
+            # Désactivez la journalisation des fichiers pour que `kubectl logs` fonctionne.
+            - name: CALICO_DISABLE_FILE_LOGGING
+              value: "true"
+            # Définissez le point de terminaison Felix pour héberger l'action par défaut sur ACCEPTER.
+            - name: FELIX_DEFAULTENDPOINTTOHOSTACTION
+              value: "ACCEPT"
+            # Désactivez IPv6 sur Kubernetes.
+            - name: FELIX_IPV6SUPPORT
+              value: "false"
+            # Définissez la journalisation Felix sur "info"
+            - name: FELIX_LOGSEVERITYSCREEN
+              value: "info"
+            - name: FELIX_HEALTHENABLED
+              value: "true"
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              cpu: 250m
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: 9099
+              host: localhost
+            periodSeconds: 10
+            initialDelaySeconds: 10
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+              - /bin/calico-node
+              - -bird-ready
+              - -felix-ready
+            periodSeconds: 10
+          volumeMounts:
+            - mountPath: /lib/modules
+              name: lib-modules
+              readOnly: true
+            - mountPath: /run/xtables.lock
+              name: xtables-lock
+              readOnly: false
+            - mountPath: /var/run/calico
+              name: var-run-calico
+              readOnly: false
+            - mountPath: /var/lib/calico
+              name: var-lib-calico
+              readOnly: false
+            - mountPath: /calico-secrets
+              name: etcd-certs
+        # Ce conteneur installe les binaires Calico CNI
+        # et le fichier de configuration réseau CNI sur chaque nœud.
+        - name: install-cni
+          image: calico/cni:v3.3.7
+          command: ["/install-cni.sh"]
+          env:
+            # Nom du fichier de configuration CNI à créer.
+            - name: CNI_CONF_NAME
+              value: "10-calico.conflist"
+            # Emplacement du cluster Calico etcd.
+            - name: ETCD_ENDPOINTS
+              valueFrom:
+                configMapKeyRef:
+                  name: calico-config
+                  key: etcd_endpoints
+            # La configuration réseau CNI à installer sur chaque nœud.
+            - name: CNI_NETWORK_CONFIG
+              valueFrom:
+                configMapKeyRef:
+                  name: calico-config
+                  key: cni_network_config
+            # Variable de configuration CNI MTU
+            - name: CNI_MTU
+              valueFrom:
+                configMapKeyRef:
+                  name: calico-config
+                  key: veth_mtu
+          volumeMounts:
+            - mountPath: /host/opt/cni/bin
+              name: cni-bin-dir
+            - mountPath: /host/etc/cni/net.d
+              name: cni-net-dir
+            - mountPath: /calico-secrets
+              name: etcd-certs
+      volumes:
+        # Utilisé par calico/node.
+        - name: lib-modules
+          hostPath:
+            path: /lib/modules
+        - name: var-run-calico
+          hostPath:
+            path: /var/run/calico
+        - name: var-lib-calico
+          hostPath:
+            path: /var/lib/calico
+        - name: xtables-lock
+          hostPath:
+            path: /run/xtables.lock
+            type: FileOrCreate
+        # Utilisé pour installer CNI.
+        - name: cni-bin-dir
+          hostPath:
+            path: /opt/cni/bin
+        - name: cni-net-dir
+          hostPath:
+            path: /etc/cni/net.d
+        # Montez dans les secrets etcd TLS avec le mode 400.
+        # Voir https://kubernetes.io/docs/concepts/configuration/secret/
+        - name: etcd-certs
+          secret:
+            secretName: calico-etcd-secrets
+            defaultMode: 0400
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: calico-node
+  namespace: kube-system
+
+---
+
+# Ce manifeste déploie les contrôleurs Calico Kubernetes.
+# Voir https://github.com/projectcalico/kube-controllers
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: calico-kube-controllers
+  namespace: kube-system
+  labels:
+    k8s-app: calico-kube-controllers
+spec:
+  # Les contrôleurs ne peuvent avoir qu'une seule instance active.
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      name: calico-kube-controllers
+      namespace: kube-system
+      labels:
+        k8s-app: calico-kube-controllers
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+    spec:
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+      # Les contrôleurs doivent s'exécuter dans l'espace de noms du réseau hôte afin qu'
+      # il n'est pas régi par une politique qui l'empêcherait de fonctionner.
+      hostNetwork: true
+      tolerations:
+        # Marquez le module comme un complément essentiel pour la reprogrammation.
+        - key: CriticalAddonsOnly
+          operator: Exists
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+      serviceAccountName: calico-kube-controllers
+      containers:
+        - name: calico-kube-controllers
+          image: calico/kube-controllers:v3.3.7
+          env:
+            # Emplacement du cluster Calico etcd.
+            - name: ETCD_ENDPOINTS
+              valueFrom:
+                configMapKeyRef:
+                  name: calico-config
+                  key: etcd_endpoints
+            # Emplacement du certificat CA pour etcd.
+            - name: ETCD_CA_CERT_FILE
+              valueFrom:
+                configMapKeyRef:
+                  name: calico-config
+                  key: etcd_ca
+            # Emplacement de la clé client pour etcd.
+            - name: ETCD_KEY_FILE
+              valueFrom:
+                configMapKeyRef:
+                  name: calico-config
+                  key: etcd_key
+            # Emplacement du certificat client pour etcd.
+            - name: ETCD_CERT_FILE
+              valueFrom:
+                configMapKeyRef:
+                  name: calico-config
+                  key: etcd_cert
+            # Choisissez les contrôleurs à exécuter.
+            - name: ENABLED_CONTROLLERS
+              value: policy,namespace,serviceaccount,workloadendpoint,node
+          volumeMounts:
+            # Montez dans les secrets etcd TLS.
+            - mountPath: /calico-secrets
+              name: etcd-certs
+          readinessProbe:
+            exec:
+              command:
+              - /usr/bin/check-status
+              - -r
+      volumes:
+        # Montez dans les secrets etcd TLS avec le mode 400.
+        # Voir https://kubernetes.io/docs/concepts/configuration/secret/
+        - name: etcd-certs
+          secret:
+            secretName: calico-etcd-secrets
+            defaultMode: 0400
+
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: calico-kube-controllers
+  namespace: kube-system
