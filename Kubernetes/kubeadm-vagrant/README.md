@@ -48,11 +48,11 @@ Ces instructions supposent que vous avez déjà installé votre fournisseur de v
 10. Installez un plug-in CNI, tel que Calico (voir [https://docs.projectcalico.org/v3.3/getting-started/kubernetes/](https://docs.projectcalico.org/v3.3/getting-started/kubernetes/) )
 
         kubectl apply -f \
-        https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/etcd.yaml
+        [https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/etcd.yaml](https://github.com/TICHANE-JM/Outils-Devops/blob/main/Kubernetes/kubeadm-vagrant/etcd.yaml)
         kubectl apply -f \
-        https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/rbac.yaml
+        [https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/rbac.yaml](https://github.com/TICHANE-JM/Outils-Devops/blob/main/Kubernetes/kubeadm-vagrant/rbac.yaml)
         kubectl apply -f \
-        https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/calico.yaml
+        [https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/calico.yaml](https://github.com/TICHANE-JM/Outils-Devops/blob/main/Kubernetes/kubeadm-vagrant/calico.yaml)
 
 11. Déconnectez-vous et exécutez `vagrant ssh node-01` pour vous connecter à "node-01". Exécutez la commande `kubeadm join` que vous avez copiée à partir de la sortie sur "master".
 
