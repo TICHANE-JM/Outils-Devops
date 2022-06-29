@@ -1,0 +1,42 @@
+---
+- hosts: "all"
+  become: true
+  remote_user: "vagrant"
+  gather_facts: false
+
+  tasks:
+  - name: "Installer Python"
+    raw: "apt-get -y -q install python"
+
+  - name: "Gather facts"
+    setup:
+
+  - name: "Installer la clé APT Kubernetes"
+    apt_key:
+      url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
+      state: "present"
+    tags:
+      - manager
+      - worker
+
+  - name: "Ajouter le référentiel Kubernetes pour Ubuntu Xenial"
+    apt_repository:
+      repo: "deb http://apt.kubernetes.io/ kubernetes-xenial main"
+      state: "present"
+      update_cache: "yes"
+    tags:
+      - manager
+      - worker
+
+  - name: "Installer des packages pour Docker et Kubernetes"
+    apt:
+      name: "{{ item }}"
+      state: "present"
+    with_items:
+      - "docker.io"
+      - "kubectl"
+      - "kubelet"
+      - "kubeadm"
+    tags:
+      - manager
+      - node
