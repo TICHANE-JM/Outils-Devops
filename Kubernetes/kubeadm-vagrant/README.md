@@ -45,7 +45,7 @@ Ces instructions supposent que vous avez déjà installé votre fournisseur de v
         sed -i "s/KUBELET_EXTRA_ARGS=/KUBELET_EXTRA_ARGS=--node-ip=$ipaddr/" /etc/default/kubelet
         systemctl daemon-reload && systemctl restart kubelet
 
-10. Installez un plug-in CNI, tel que Calico (voir [https://docs.projectcalico.org/v3.3/getting-started/kubernetes/](https://docs.projectcalico.org/v3.3/getting-started /kubernetes/))
+10. Installez un plug-in CNI, tel que Calico (voir [https://docs.projectcalico.org/v3.3/getting-started/kubernetes/](https://docs.projectcalico.org/v3.3/getting-started /kubernetes/) )
 
         kubectl apply -f \
         https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/etcd.yaml
