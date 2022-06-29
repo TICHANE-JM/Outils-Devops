@@ -1,0 +1,27 @@
+---
+- hosts: masters
+  vars:
+    api_lb_ip: 172.20.200.10
+    api_lb_dns: api.customdomain.com
+    podSubnet: 192.168.0.0/16
+    kubeadmToken: 8fcc26.83ab1665d9142018
+    primary_interface: eth0
+
+  tasks:
+    - name: Modèle de rendu kubeadm.conf pour le premier maître empilé
+      local_action:
+        module: template
+        src: 1-kubeadm.conf.j2
+        dest: kubeadm-cfg-first.yaml
+
+    - name: Modèle de rendu kubeadm.conf pour le deuxième maître empilé
+      local_action:
+        module: template
+        src: 2-kubeadm.conf.j2
+        dest: kubeadm-cfg-second.yaml
+
+    - name: Modèle de rendu kubeadm.conf pour le troisième maître empilé
+      local_action:
+        module: template
+        src: 3-kubeadm.conf.j2
+        dest: kubeadm-cfg-third.yaml
