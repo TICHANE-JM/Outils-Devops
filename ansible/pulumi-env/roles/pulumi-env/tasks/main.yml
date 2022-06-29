@@ -1,0 +1,37 @@
+---
+- name: Télécharger l'archive d'installation de Pulumi
+  unarchive:
+    remote_src: true
+    src: "{{ pulumi_download_url }}/pulumi-v{{ pulumi_version }}-linux-x64.tar.gz"
+    dest: "/tmp"
+    creates: "/usr/local/bin/pulumi"
+  register: pulumi_downloaded
+
+- name: Déplacer les binaires Pulumi dans le chemin
+  copy:
+    remote_src: true
+    src: "/tmp/pulumi/{{ item }}"
+    dest: "/usr/local/bin/{{ item }}"
+  with_items: "{{ pulumi_package_files }}"
+  when: pulumi_downloaded is changed
+  register: pulumi_copied
+
+- name: Définir les autorisations sur les binaires Pulumi
+  file:
+    dest: "/usr/local/bin/{{ item }}"
+    mode: 0755
+    state: "file"
+  with_items: "{{ pulumi_package_files }}"
+  when: pulumi_copied is changed
+
+- name: Mettre à jour le cache d'apt
+  apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Installer NodeJS
+  apt:
+    name: "{{ item }}"
+    state: "latest"
+  with_items:
+    - nodejs
